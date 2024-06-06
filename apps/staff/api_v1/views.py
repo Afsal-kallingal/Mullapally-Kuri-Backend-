@@ -36,3 +36,137 @@ class StaffViewSet(BaseModelViewSet):
         instance.delete()
         return Response({"message": "Project Deleted Successfully"}, status=status.HTTP_200_OK)
     
+
+
+class CountryViewSet(BaseModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['name']
+    
+    def get_permissions(self):
+        if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
+            permission_classes = [IsAdmin]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+class StateViewSet(BaseModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = State.objects.all()
+    serializer_class = StateSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['name']
+
+    def get_permissions(self):
+        if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
+            permission_classes = [IsAdmin]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
+    def get_queryset(self):
+        queryset = State.objects.filter()
+        if "country" in self.request.GET:
+            queryset = queryset.filter(country=self.request.GET.get("country"))
+        return queryset
+
+class DistrictViewSet(BaseModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = District.objects.all()
+    serializer_class = DistrictSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['name']
+
+    def get_permissions(self):
+        if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
+            permission_classes = [IsAdmin]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
+    def get_queryset(self):
+        queryset = District.objects.filter()
+        if "state" in self.request.GET:
+            queryset = queryset.filter(state=self.request.GET.get("state"))
+        return queryset
+
+    
+class DesignationViewSet(BaseModelViewSet):
+    queryset = Designation.objects.all()
+    serializer_class = DesignationSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['name']
+
+    def get_permissions(self):
+        if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
+            permission_classes = [IsAdmin]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+class WorkRoleViewSet(BaseModelViewSet):
+    queryset = Work_Role.objects.all()
+    serializer_class = WorkRoleSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['name']
+
+    def get_permissions(self):
+        if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
+            permission_classes = [IsAdmin]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+class DepartmentViewSet(BaseModelViewSet):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['name']
+
+    def get_permissions(self):
+        if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
+            permission_classes = [IsAdmin]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+class OfficeLocationViewSet(BaseModelViewSet):
+    queryset = OfficeLocation.objects.all()
+    serializer_class = OfficeLocationSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['address']
+
+    def get_permissions(self):
+        if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
+            permission_classes = [IsAdmin]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+class SiteViewSet(BaseModelViewSet):
+    queryset = Site.objects.all()
+    serializer_class = SiteSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['name']
+
+    def get_permissions(self):
+        if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
+            permission_classes = [IsAdmin]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+class ReportToViewSet(BaseModelViewSet):
+    queryset = Report_To.objects.all()
+    serializer_class = ReportToSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['name']
+
+    def get_permissions(self):
+        if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
+            permission_classes = [IsAdmin]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]

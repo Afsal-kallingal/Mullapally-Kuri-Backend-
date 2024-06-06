@@ -95,3 +95,53 @@ class StaffSerializer(BaseModelSerializer):
         # Save the updated instance
         instance.save()
         return instance
+    
+
+class DistrictSerializer(BaseModelSerializer):
+    class Meta:
+        model = District
+        fields = '__all__'
+
+class StateSerializer(BaseModelSerializer):
+    districts = DistrictSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = State
+        fields = '__all__'
+
+class CountrySerializer(BaseModelSerializer):
+    states = StateSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Country
+        fields = '__all__'
+
+class DesignationSerializer(BaseModelSerializer):
+    class Meta:
+        model = Designation
+        fields = '__all__'
+
+class WorkRoleSerializer(BaseModelSerializer):
+    class Meta:
+        model = Work_Role
+        fields = '__all__'
+
+class DepartmentSerializer(BaseModelSerializer):
+    class Meta:
+        model = Department
+        fields = '__all__'
+
+class OfficeLocationSerializer(BaseModelSerializer):
+    class Meta:
+        model = OfficeLocation
+        fields = '__all__'
+
+class SiteSerializer(BaseModelSerializer):
+    class Meta:
+        model = Site
+        fields = '__all__'
+
+class ReportToSerializer(BaseModelSerializer):
+    class Meta:
+        model = Report_To
+        fields = '__all__'

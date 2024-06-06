@@ -9,7 +9,7 @@ from rest_framework import permissions
 # Define API URL patterns for various apps
 urlpatterns = [
     path("api/v1/user/", include("apps.user_account.api_v1.api_router", namespace="user_account_api_router_v1")),
-    # path("api/v1/project/", include("apps.project.api_v1.api_router", namespace="investor_api_router_v1")),
+    path("api/v1/staff/", include("apps.staff.api_v1.api_router", namespace="investor_api_router_v1")),
 ]
 
 # Admin URL
