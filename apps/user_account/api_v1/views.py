@@ -56,7 +56,6 @@ class UserViewSet(BaseModelViewSet):
         return [permission() for permission in permission_classes]
     
 
-
 @csrf_exempt
 @api_view(['POST',])
 @permission_classes((AllowAny, ))
@@ -77,7 +76,7 @@ def registration_view(request):
         # serializer = UserSerializer(data=request_data)
         # if serializer.is_valid():
         #     user = serializer.save()
-            data['response'] = 'successfully registered new user.'
+            data['response'] = 'Successfully registered new user.'
             data['email'] = user.email
             user.save()
             data['username'] = user.username
@@ -184,10 +183,6 @@ def registration_view(request):
 #     return Response(data,status=status_code)
 # >>>>> Register with phone number <<<<<<<<<
 # >>>>> Register with phone number <<<<<<<<<
-
-
-
-
 
 
 # >>>>> Register with phone number <<<<<<<<<
@@ -426,8 +421,8 @@ def login_phone_pass(request):
     context = {}
     phone = request.data.get('phone')
     password = request.data.get('password')
-    if(User.objects.filter(phone=phone, phone_verified=True).exists):
-        user = User.objects.get(phone=phone, phone_verified=True)
+    if(User.objects.filter(phone=phone).exists):
+        user = User.objects.get(phone=phone)
         if user.check_password(password):
             try:
                 token = Token.objects.get(user=user).key

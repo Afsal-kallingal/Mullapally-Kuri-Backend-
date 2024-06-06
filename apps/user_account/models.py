@@ -15,6 +15,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
 
+
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -75,6 +76,8 @@ class UserManager(BaseUserManager):
             )
         return self.none()
 
+
+
 # class BaseModel(models.Model):
 #     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 #     auto_id = models.CharField(max_length=128,db_index = True,unique=True)
@@ -83,10 +86,11 @@ class UserManager(BaseUserManager):
 #     class Meta:
 #         abstract = True
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
     id =models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username = models.CharField(null=True,blank=True,default=1,max_length=40)
+    username = models.CharField(unique=True,default=1,max_length=40)
     full_name = models.CharField(_("Name of User"), blank=True, max_length=255)
     dob = models.CharField(max_length=30,null=True,blank=True)
     country_code = models.CharField(max_length=5,null=True,blank=True,default=91)
@@ -94,30 +98,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone_verified = models.BooleanField(default=False)
     email = models.EmailField(_('email address'), null=True,blank=True)
     email_verified = models.BooleanField(default=False)
-    role_choices = (
-        ('salesman', 'Salesman'),
-        ('fieldsalesman', 'Field Salesman'),
-        ('marketing', 'Marketing'),
-        ('billing', 'Billing'),
-        ('cashier', 'Cashier'),
-        ('accountant', 'Accountant'),
-        ('telecalling', 'Telecalling'),
-        ('purchase', 'Purchase'),
-        ('delivery', 'Delivery'),
-        ('warehousing', 'Warehousing'),
-        ('operation director', 'Operation Director'),
-        ('hr', 'HR'),
-        ('assistant hr', 'Assistant HR'),
-        ('general manager', 'General Manager'),
-        ('manager', 'Manager'),
-        ('department manager', 'Department Manager'),
-        ('department head', 'Department Head'),
-        ('senior staff', 'Senior Staff'),
-    )
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
-    role = models.CharField(max_length=30,choices=role_choices,null=True,blank=True)
+    role = models.CharField(max_length=30,null=True,blank=True)
     is_admin = models.BooleanField(default=False,null=True,blank=True)
     is_superuser = models.BooleanField(default=False,null=True,blank=True)
+    
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
@@ -132,7 +117,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         ),
     )
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+
     objects = UserManager()
+
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
