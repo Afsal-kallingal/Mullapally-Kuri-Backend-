@@ -10,11 +10,11 @@ class CreateStaffSerializer(BaseModelSerializer):
     # full_name = serializers.CharField(max_length=128, write_only=True)
     country_code = serializers.IntegerField(write_only=True)
     phone_number = serializers.IntegerField(write_only=True)
-    email = serializers.EmailField(write_only=True)
+    # email = serializers.EmailField(write_only=True)
 
     class Meta:
         model = Staff
-        fields = ['id','user', 'first_name', 'phone_number','address_line', 'salary','designation', 'post', 'reports_to','department','office_location','site','operating',]
+        fields = ['id','first_name','last_name','country_code','phone_number','address_line','dob','district','salary','rewards','designation','post','department','office_location','site','operating']
         
     def create(self, validated_data):
             # full_name = validated_data.pop('full_name', None)
@@ -37,7 +37,14 @@ class CreateStaffSerializer(BaseModelSerializer):
                 raise serializers.ValidationError("Phone number already exists !")
             
             return instance
-    
+
+class StafflistSerializer(BaseModelSerializer):
+    class Meta:
+        model = Staff
+        fields = ['id','first_name','last_name','country_code','phone_number','address_line','dob','district','salary','rewards','designation','post','department','office_location','site','operating',]
+
+
+
 
 class StaffSerializer(BaseModelSerializer):
     first_name = serializers.CharField(source='user.full_name')
@@ -54,7 +61,7 @@ class StaffSerializer(BaseModelSerializer):
 
     class Meta:
         model = Staff
-        fields = ['id','first_name','last_name','email','country_code','phone_number','address_line','dob','district','salary','rewards','designation','post','reports_to','department','office_location','site','operating',]
+        fields = ['id','first_name','last_name','email','country_code','phone_number','address_line','dob','district','salary','rewards','designation','post','department','office_location','site','operating',]
 
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get('first_name', instance.first_name)
@@ -123,7 +130,7 @@ class DesignationSerializer(BaseModelSerializer):
 
 class WorkRoleSerializer(BaseModelSerializer):
     class Meta:
-        model = Work_Role
+        model = WorkRole
         fields = '__all__'
 
 class DepartmentSerializer(BaseModelSerializer):
@@ -141,7 +148,7 @@ class SiteSerializer(BaseModelSerializer):
         model = Site
         fields = '__all__'
 
-class ReportToSerializer(BaseModelSerializer):
-    class Meta:
-        model = Report_To
-        fields = '__all__'
+# class ReportToSerializer(BaseModelSerializer):
+#     class Meta:
+#         model = Report_To
+#         fields = '__all__'

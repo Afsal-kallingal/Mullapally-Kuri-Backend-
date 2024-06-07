@@ -1,4 +1,3 @@
-from mahall.models import MahallGroupAdmin, MahallUser
 from rest_framework import permissions
 from django.contrib.auth.models import Group
 

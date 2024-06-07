@@ -36,6 +36,19 @@ class StaffViewSet(BaseModelViewSet):
         instance.delete()
         return Response({"message": "Project Deleted Successfully"}, status=status.HTTP_200_OK)
     
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreateStaffSerializer
+        # elif self.action == 'update':
+        #     if self.request.user.is_admin:
+        #         return InvestorSerializer
+        #     else:
+        #         return UpdateInvestorSerializer
+        elif self.action == 'list':
+            return StafflistSerializer
+        
+        else:
+            return StaffSerializer
 
 
 class CountryViewSet(BaseModelViewSet):
@@ -107,7 +120,7 @@ class DesignationViewSet(BaseModelViewSet):
         return [permission() for permission in permission_classes]
 
 class WorkRoleViewSet(BaseModelViewSet):
-    queryset = Work_Role.objects.all()
+    queryset = WorkRole.objects.all()
     serializer_class = WorkRoleSerializer
     filter_backends = [SearchFilter]
     search_fields = ['name']
@@ -158,15 +171,15 @@ class SiteViewSet(BaseModelViewSet):
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
-class ReportToViewSet(BaseModelViewSet):
-    queryset = Report_To.objects.all()
-    serializer_class = ReportToSerializer
-    filter_backends = [SearchFilter]
-    search_fields = ['name']
+# class ReportToViewSet(BaseModelViewSet):
+#     queryset = Report_To.objects.all()
+#     serializer_class = ReportToSerializer
+#     filter_backends = [SearchFilter]
+#     search_fields = ['name']
 
-    def get_permissions(self):
-        if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
-            permission_classes = [IsAdmin]
-        else:
-            permission_classes = [IsAuthenticated]
-        return [permission() for permission in permission_classes]
+#     def get_permissions(self):
+#         if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
+#             permission_classes = [IsAdmin]
+#         else:
+#             permission_classes = [IsAuthenticated]
+#         return [permission() for permission in permission_classes]

@@ -432,6 +432,7 @@ def login_phone_pass(request):
             save_login_history(request,user,"phone-pass login")
             
             response_data = {'user_id': user.pk, 'token': token}
+            print(token)
             return Response(response_data, status=status.HTTP_200_OK)
         else:
             context['error'] = 'Invalid password or Phone'
@@ -442,6 +443,37 @@ def login_phone_pass(request):
 # >>>>> login with phone and password <<<<<<<<<
 # >>>>> login with phone and password <<<<<<<<<
 
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def admin_login_phone_pass(request):
+    context = {}
+    phone = request.data.get('phone')
+    password = request.data.get('password')
+    
+    if User.objects.filter(phone=phone).exists():
+        user = User.objects.get(phone=phone)
+        if user.is_admin:
+            # context['error'] = 'Permission denied. Admins only.'
+            # return Response(context, status=status.HTTP_403_FORBIDDEN)
+            if user.check_password(password):
+                try:
+                    token = Token.objects.get(user=user).key
+                except Token.DoesNotExist:
+                    token = Token.objects.create(user=user).key
+
+                save_login_history(request, user, "admin-phone-pass login")
+                
+                response_data = {'user_id': user.pk, 'token': token}
+                return Response(response_data, status=status.HTTP_200_OK)
+            else:
+                context['error'] = 'Invalid password or phone number'
+                return Response(context, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            context['error'] = 'Permission denied. Admins only.'
+            return Response(context, status=status.HTTP_401_UNAUTHORIZED)
+    else:
+        context['error'] = 'User not found'
+        return Response(context, status=status.HTTP_401_UNAUTHORIZED)
 
 # >>>>> Login with email and password <<<<<<<<<
 # >>>>> Login with email and password <<<<<<<<< 
