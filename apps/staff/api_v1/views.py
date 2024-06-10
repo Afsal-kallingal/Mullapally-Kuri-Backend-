@@ -6,7 +6,7 @@ from apps.staff.models import *
 from apps.staff.api_v1.serializers import *
 from rest_framework.filters import SearchFilter
 from apps.user_account.functions import IsAdmin
-# from apps.main.permissions import IsStaffAdmin
+from apps.main.permissions import IsStaffAdmin
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -24,7 +24,7 @@ class StaffViewSet(BaseModelViewSet):
 
     def get_permissions(self):
         if self.action == 'create' or self.action == 'destroy':
-            permission_classes = [IsAdmin] 
+            permission_classes = [IsAdmin | IsStaffAdmin]
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]

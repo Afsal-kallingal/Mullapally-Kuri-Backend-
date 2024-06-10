@@ -33,6 +33,7 @@ class UserAdmin(auth_admin.UserAdmin):
                     "is_staff",
                     "is_admin",
                     "is_superuser",
+                    "staff_permisions",
                     "groups",
                     "user_permissions",
                 ),

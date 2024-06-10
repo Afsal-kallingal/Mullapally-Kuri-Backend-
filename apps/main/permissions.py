@@ -25,22 +25,19 @@ from django.contrib.auth.models import Group
 #                 return True
 #         return False
 
-
-class IsAdmin(permissions.BasePermission):
+class IsStaffAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.user.is_authenticated:
-            request_role = request.headers["Role"]
-            if request.user.groups.all().exists() and request_role=="admin":
-                return True
+        if request.user.is_authenticated and request.user.staff_permisions:
+            return True
         return False
 
-
-# class IsStaffAdmin(permissions.BasePermission):
+# class IsAdmin(permissions.BasePermission):
 #     def has_permission(self, request, view):
-#         if request.user.is_authenticated and request.user.staff_permisions:
-#             return True
+#         if request.user.is_authenticated:
+#             request_role = request.headers["Role"]
+#             if request.user.groups.all().exists() and request_role=="admin":
+#                 return True
 #         return False
-
 
 # class IsQualityChecker(permissions.BasePermission):
 #     def has_permission(self, request, view):
