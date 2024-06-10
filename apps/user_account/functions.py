@@ -106,9 +106,6 @@ class IsAdmin(permissions.BasePermission):
         return False
 
 
-
-
-
 def fetch_user_by_phone(phone):
     r = requests.post(settings.USER_ACCOUNT_API_URL + 'fetch-user-by-phone/', data={
             "phone":phone,

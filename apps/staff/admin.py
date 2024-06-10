@@ -4,7 +4,7 @@ from apps.staff.models import *
 
 
 class StaffAdmin(admin.ModelAdmin):
-    list_display = ('id','first_name','last_name','email','country_code','phone_number','address_line','dob','district','salary','rewards','designation','post','department','office_location','site','operating','date_added', 'creator',
+    list_display = ('id','full_name','address_line','dob','district','salary','rewards','designation','post','department','office_location','site','operating','date_added', 'creator',
     )
 admin.site.register(Staff,StaffAdmin)
 

@@ -6,6 +6,7 @@ from apps.staff.models import *
 from apps.staff.api_v1.serializers import *
 from rest_framework.filters import SearchFilter
 from apps.user_account.functions import IsAdmin
+# from apps.main.permissions import IsStaffAdmin
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -15,7 +16,7 @@ from drf_yasg import openapi
 #     serializer_class = InvestorSerializer
 
 class StaffViewSet(BaseModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated ]
     queryset = Staff.objects.all()
     serializer_class = StaffSerializer
     filter_backends = [SearchFilter]
@@ -23,7 +24,7 @@ class StaffViewSet(BaseModelViewSet):
 
     def get_permissions(self):
         if self.action == 'create' or self.action == 'destroy':
-            permission_classes = [IsAdmin]
+            permission_classes = [IsAdmin] 
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
@@ -34,7 +35,7 @@ class StaffViewSet(BaseModelViewSet):
         User.objects.filter(pk=user.pk).delete()
         # user.delete()
         instance.delete()
-        return Response({"message": "Project Deleted Successfully"}, status=status.HTTP_200_OK)
+        return Response({"message": "Staff Deleted Successfully"}, status=status.HTTP_200_OK)
     
     def get_serializer_class(self):
         if self.action == 'create':
@@ -43,12 +44,19 @@ class StaffViewSet(BaseModelViewSet):
         #     if self.request.user.is_admin:
         #         return InvestorSerializer
         #     else:
-        #         return UpdateInvestorSerializer
-        elif self.action == 'list':
-            return StafflistSerializer
+        # #         return UpdateInvestorSerializer
+        # elif self.action == 'list':
+        #     return StafflistSerializer
         
         else:
             return StaffSerializer
+        
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if not request.user.is_admin and instance.user != request.user:
+            return Response({"detail": "You do not have permission to update this profile."}, status=status.HTTP_403_FORBIDDEN)
+
+        return super().update(request, *args, **kwargs)
 
 
 class CountryViewSet(BaseModelViewSet):

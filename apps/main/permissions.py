@@ -1,9 +1,5 @@
 from rest_framework import permissions
 from django.contrib.auth.models import Group
-
-
-
-
 # from django.contrib.auth.decorators import user_passes_test
 
 # def group_required(*group_names):
@@ -29,6 +25,7 @@ from django.contrib.auth.models import Group
 #                 return True
 #         return False
 
+
 class IsAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.user.is_authenticated:
@@ -38,11 +35,14 @@ class IsAdmin(permissions.BasePermission):
         return False
 
 
-
+# class IsStaffAdmin(permissions.BasePermission):
+#     def has_permission(self, request, view):
+#         if request.user.is_authenticated and request.user.staff_permisions:
+#             return True
+#         return False
 
 
 # class IsQualityChecker(permissions.BasePermission):
-
 #     def has_permission(self, request, view):
 #         if request.user.is_authenticated:
 #             if  request.user.role in ['admin', 'generalmanager', 'productionmanager' , 'qualitychecker'] :

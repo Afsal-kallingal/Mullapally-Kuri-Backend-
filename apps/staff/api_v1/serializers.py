@@ -4,50 +4,46 @@ from apps.staff.models import *
 from apps.user_account.functions import validate_phone
 from apps.user_account.models import User
 
-
-
 class CreateStaffSerializer(BaseModelSerializer):
-    # full_name = serializers.CharField(max_length=128, write_only=True)
-    country_code = serializers.IntegerField(write_only=True)
-    phone_number = serializers.IntegerField(write_only=True)
-    # email = serializers.EmailField(write_only=True)
+    full_name = serializers.CharField(max_length=128, write_only=True)
+    country_code = serializers.CharField(max_length=5, write_only=True)
+    phone = serializers.CharField(max_length=15, write_only=True)
+    email = serializers.EmailField(write_only=True)
 
     class Meta:
         model = Staff
-        fields = ['id','first_name','last_name','country_code','phone_number','address_line','dob','district','salary','rewards','designation','post','department','office_location','site','operating']
-        
+        fields = [
+            'id', 'full_name', 'phone', 'country_code', 'email', 'address_line', 'dob', 'district', 
+            'salary', 'rewards', 'designation', 'post', 'department', 'office_location', 'site', 'operating'
+        ]
+
     def create(self, validated_data):
-            # full_name = validated_data.pop('full_name', None)
-            country_code = validated_data.pop('country_code', None)
-            phone = validated_data.pop('phone', None)
-            email = validated_data.pop('email', None)
-            if(validate_phone(country_code,phone)):
-                user_account = User.objects.create(
-                    # full_name=full_name,
-                    country_code=country_code,
-                    phone=phone,
-                    email=email,
-                    username=str(str(country_code)+str(phone)),
-                    phone_verified=True
-                    )
-                validated_data["user"] = user_account
-                instance = super().create(validated_data)
-            else:
-                instance = Staff.objects.none
-                raise serializers.ValidationError("Phone number already exists !")
-            
-            return instance
+        full_name = validated_data.pop('full_name', None)
+        country_code = validated_data.pop('country_code', None)
+        phone = validated_data.pop('phone', None)
+        email = validated_data.pop('email', None)
 
-class StafflistSerializer(BaseModelSerializer):
-    class Meta:
-        model = Staff
-        fields = ['id','first_name','last_name','country_code','phone_number','address_line','dob','district','salary','rewards','designation','post','department','office_location','site','operating',]
+        if validate_phone(country_code, phone):
+            user_account = User.objects.create(
+                full_name=full_name,
+                country_code=country_code,
+                phone=phone,
+                email=email,
+                username=str(str(country_code)+str(phone)),
+                phone_verified=True
+            )
+            # Set the user in the validated_data dictionary to be used by the super().create() call
+            validated_data["user"] = user_account
 
+            instance = super().create(validated_data)
+        else:
+            instance = Staff.objects.none
+            raise serializers.ValidationError("Phone number already exists!")
 
-
+        return instance
 
 class StaffSerializer(BaseModelSerializer):
-    first_name = serializers.CharField(source='user.full_name')
+    full_name = serializers.CharField(source='user.full_name')
     phone = serializers.CharField(source='user.phone')
     country_code = serializers.CharField(source='user.country_code')
     email = serializers.CharField(source='user.email')
@@ -56,19 +52,12 @@ class StaffSerializer(BaseModelSerializer):
     state_name = serializers.CharField(source='district.state.name',read_only=True)
     district_name = serializers.CharField(source='district.name',read_only=True)
     country_name = serializers.CharField(source='district.state.country.name',read_only=True)
-    # nominee_district_name = serializers.CharField(source='nominee_district.name',read_only=True)
-    # nominee_state_name = serializers.CharField(source='nominee_district.state.name',read_only=True)
 
     class Meta:
         model = Staff
-        fields = ['id','first_name','last_name','email','country_code','phone_number','address_line','dob','district','salary','rewards','designation','post','department','office_location','site','operating',]
+        fields = ['id','full_name','email','country_code','phone','state_name','district_name','country_name','district_name','country_name','address_line','dob','district','salary','rewards','designation','post','department','office_location','site','operating',]
 
     def update(self, instance, validated_data):
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.email = validated_data.get('email', instance.email)
-        instance.country_code = validated_data.get('country_code', instance.country_code)
-        instance.phone_number = validated_data.get('phone_number', instance.phone_number)
         instance.address_line = validated_data.get('address_line', instance.address_line)
         instance.dob = validated_data.get('dob', instance.dob)
         instance.district = validated_data.get('district', instance.district)
@@ -84,7 +73,7 @@ class StaffSerializer(BaseModelSerializer):
         # instance.description = validated_data.get('description', instance.description)
         # instance.benefits = validated_data.get('benefits', instance.benefits)
         # Update user fields
-        user_data = validated_data.pop('user', {})  # Extract user data if provided
+        user_data = validated_data.pop('user', {})  
         user = instance.user
         if user_data:
             user.full_name = user_data.get('full_name', user.full_name)
@@ -103,7 +92,6 @@ class StaffSerializer(BaseModelSerializer):
         instance.save()
         return instance
     
-
 class DistrictSerializer(BaseModelSerializer):
     class Meta:
         model = District

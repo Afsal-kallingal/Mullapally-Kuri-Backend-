@@ -58,12 +58,10 @@ class Staff(BaseModel):
         ('office', 'In Office'),
         ('field', 'Field'),
     ]
-   
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True, default='')
-    country_code = models.CharField(max_length=5, default='91')
-    phone_number = models.CharField(max_length=15, unique=True)
+    full_name = models.CharField(blank=True, max_length=255)
+    # email = models.EmailField(blank=True, null=True, default='')/
+    # country_code = models.CharField(max_length=5, default='91')
+    # phone_number = models.CharField(max_length=15, unique=True)
     address_line = models.CharField(max_length=255, blank=True, null=True)
     dob = models.DateField(null=True, blank=True, default=None)
     district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True, blank=True, related_name='investor_district')
@@ -77,4 +75,4 @@ class Staff(BaseModel):
     operating = models.CharField(max_length=10, choices=OPERATING_CHOICES)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return self.full_name
