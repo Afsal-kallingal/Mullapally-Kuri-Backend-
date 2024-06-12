@@ -25,11 +25,11 @@ class Supplier(BaseModel):
 
 class Product(BaseModel):
     name = models.CharField(max_length=100)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    cost = models.DecimalField(max_digits=10, decimal_places=2)  # Cost price
-    profit = models.DecimalField(max_digits=10, decimal_places=2)  # Profit amount
-    taxable_amount = models.DecimalField(max_digits=10, decimal_places=2)  # Taxable amount
+    description = models.TextField(null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2 , default=0)
+    cost = models.DecimalField(max_digits=10, decimal_places=2 ,default=0)  # Cost price
+    profit = models.DecimalField(max_digits=10, decimal_places=2 ,default=0)  # Profit amount
+    taxable_amount = models.DecimalField(max_digits=10, decimal_places=2 ,default=0)  # Taxable amount
     discount_price = models.DecimalField(max_digits=10, decimal_places=2)  # Discounted price
     stock = models.IntegerField()
     product_category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)

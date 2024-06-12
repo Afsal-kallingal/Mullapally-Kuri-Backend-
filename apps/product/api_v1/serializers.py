@@ -1,8 +1,7 @@
 from apps.main.serializers import BaseModelSerializer
-from rest_framework import serializers
 from apps.product.models import *
 from apps.user_account.functions import validate_phone
-from apps.user_account.models import User
+
 
 class CategorySerializer(BaseModelSerializer):
     class Meta:
@@ -22,4 +21,5 @@ class SupplierSerializer(BaseModelSerializer):
 class ProductSerializer(BaseModelSerializer):
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['id','name','description','price','cost','profit','taxable_amount','discount_price','stock','product_category','brand','supplier','points','image','updated_at','date_added','creator',]
+
