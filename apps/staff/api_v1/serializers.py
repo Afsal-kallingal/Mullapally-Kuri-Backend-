@@ -9,11 +9,12 @@ class CreateStaffSerializer(BaseModelSerializer):
     country_code = serializers.CharField(max_length=5, write_only=True)
     phone = serializers.CharField(max_length=15, write_only=True)
     email = serializers.EmailField(write_only=True)
+    password = serializers.CharField(write_only=True, style={'input_type': 'password'})
 
     class Meta:
         model = Staff
         fields = [
-            'id', 'full_name', 'phone', 'country_code', 'email', 'address_line', 'dob', 'district', 
+            'id', 'full_name', 'phone', 'country_code', 'email', 'password', 'address_line', 'dob', 'district', 
             'salary', 'rewards', 'designation', 'post', 'department', 'office_location', 'site', 'operating'
         ]
 
@@ -22,22 +23,25 @@ class CreateStaffSerializer(BaseModelSerializer):
         country_code = validated_data.pop('country_code', None)
         phone = validated_data.pop('phone', None)
         email = validated_data.pop('email', None)
+        password = validated_data.pop('password', None)
 
         if validate_phone(country_code, phone):
-            user_account = User.objects.create(
+            user_account = User(
                 full_name=full_name,
                 country_code=country_code,
                 phone=phone,
                 email=email,
-                username=str(str(country_code)+str(phone)),
+                username=str(str(country_code) + str(phone)),
                 phone_verified=True
             )
+            user_account.set_password(password)  # Hash the password
+            user_account.save()
+
             # Set the user in the validated_data dictionary to be used by the super().create() call
             validated_data["user"] = user_account
 
             instance = super().create(validated_data)
         else:
-            instance = Staff.objects.none
             raise serializers.ValidationError("Phone number already exists!")
 
         return instance
@@ -64,8 +68,8 @@ class StaffSerializer(BaseModelSerializer):
         instance.salary = validated_data.get('salary', instance.salary)
         instance.rewards = validated_data.get('rewards', instance.rewards)
         instance.designation = validated_data.get('designation', instance.designation)
-        instance.role = validated_data.get('role', instance.role)
-        instance.reports_to = validated_data.get('reports_to', instance.reports_to)
+        instance.post = validated_data.get('post', instance.post)
+        # instance.reports_to = validated_data.get('reports_to', instance.reports_to)
         instance.department = validated_data.get('department', instance.department)
         instance.office_location = validated_data.get('office_location', instance.office_location)
         instance.site = validated_data.get('site', instance.site)

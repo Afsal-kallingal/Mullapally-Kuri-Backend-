@@ -433,7 +433,9 @@ def login_phone_pass(request):
             
             response_data = {'user_id': user.pk, 'token': token}
             print(token)
+            print(status.HTTP_200_OK)
             return Response(response_data, status=status.HTTP_200_OK)
+            
         else:
             context['error'] = 'Invalid password or Phone'
             return Response(context, status=status.HTTP_401_UNAUTHORIZED)

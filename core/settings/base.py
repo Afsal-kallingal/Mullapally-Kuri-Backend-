@@ -110,6 +110,8 @@ LOCAL_APPS = [
     "apps.user_account",
     "apps.main",
     "apps.staff",
+    "apps.dashboard",
+    "apps.product",
     # "useraccount",
     # Your stuff: custom apps go here
 ]

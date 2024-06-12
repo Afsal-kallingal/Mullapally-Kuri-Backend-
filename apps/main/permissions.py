@@ -31,6 +31,13 @@ class IsStaffAdmin(permissions.BasePermission):
             return True
         return False
 
+class IsProductAdmin(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.product_permisons:
+            return True
+        return False
+
+
 # class IsAdmin(permissions.BasePermission):
 #     def has_permission(self, request, view):
 #         if request.user.is_authenticated:
