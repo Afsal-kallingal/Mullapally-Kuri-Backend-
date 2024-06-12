@@ -22,6 +22,9 @@ class Customer(BaseModel):
     is_active = models.BooleanField(default=True)
     customer_id = models.CharField(max_length=20,blank=True, null=True)
 
+    def __str__(self):
+        return self.first_name
+    
 class Target(BaseModel):
     name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
