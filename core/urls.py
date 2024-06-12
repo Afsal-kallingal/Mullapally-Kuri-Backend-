@@ -11,6 +11,10 @@ urlpatterns = [
     path("api/v1/user/", include("apps.user_account.api_v1.api_router", namespace="user_account_api_router_v1")),
     path("api/v1/staff/", include("apps.staff.api_v1.api_router", namespace="investor_api_router_v1")),
     path("api/v1/store/", include("apps.product.api_v1.api_router", namespace="product_api_router_v1")),
+    # path("api/v1/target/", include("apps.target.api_v1.api_router", namespace="target_api_router_v1")),
+    # path("api/v1/", include("apps.dashboard.api_v1.api_router", namespace="dashboard_api_router_v1")),
+
+
 ]
 
 # Admin URL

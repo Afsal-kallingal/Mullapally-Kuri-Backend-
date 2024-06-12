@@ -112,6 +112,7 @@ LOCAL_APPS = [
     "apps.staff",
     "apps.dashboard",
     "apps.product",
+    "apps.target",
     # "useraccount",
     # Your stuff: custom apps go here
 ]
