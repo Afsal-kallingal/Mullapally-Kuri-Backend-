@@ -54,12 +54,13 @@ class StaffSerializer(BaseModelSerializer):
     # country = serializers.CharField(source='district.state.country.id',read_only=True)
     # state = serializers.CharField(source='district.id',read_only=True)
     state_name = serializers.CharField(source='district.state.name',read_only=True)
+    designation_name = serializers.CharField(source='designation.name',read_only=True)
     district_name = serializers.CharField(source='district.name',read_only=True)
     country_name = serializers.CharField(source='district.state.country.name',read_only=True)
 
     class Meta:
         model = Staff
-        fields = ['id','full_name','email','country_code','phone','state_name','district_name','country_name','district_name','country_name','address_line','dob','district','salary','rewards','designation','post','department','office_location','site','operating',]
+        fields = ['id','full_name','email','country_code','phone','designation_name','state_name','district_name','country_name','district_name','country_name','address_line','dob','district','salary','rewards','designation','post','department','office_location','site','operating',]
 
     def update(self, instance, validated_data):
         instance.address_line = validated_data.get('address_line', instance.address_line)

@@ -37,6 +37,12 @@ class IsProductAdmin(permissions.BasePermission):
             return True
         return False
 
+class IsTargetAdmin(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.target_admin:
+            return True
+        return False
+
 
 # class IsAdmin(permissions.BasePermission):
 #     def has_permission(self, request, view):
