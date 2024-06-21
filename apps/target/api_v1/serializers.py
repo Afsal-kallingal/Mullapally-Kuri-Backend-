@@ -43,9 +43,10 @@ class TargetSerializer(BaseModelSerializer):
     class Meta:
         model = Target
         fields = [
-            'id', 'name', 'description', 'start_datetime', 'end_datetime', 
+            'auto_id', 'name', 'description', 'start_datetime', 'end_datetime', 
             'target_amount', 'achieved_amount', 'user', 'customer', 'products'
         ]
+        read_only_fields = ('auto_id',)
 
     def create(self, validated_data):
         products_data = validated_data.pop('products')
@@ -66,6 +67,5 @@ class TargetSerializer(BaseModelSerializer):
         
         if products_data is not None:
             instance.products.set(products_data)
-            
         instance.save()
         return instance
