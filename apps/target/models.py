@@ -2,8 +2,6 @@ from django.db import models
 from apps.main.models import BaseModel
 from apps.user_account.models import User
 from apps.product.models import Product
-from django.utils import timezone
-
 
 class Customer(BaseModel):
     CUSTOMER_TYPES = (
@@ -21,7 +19,7 @@ class Customer(BaseModel):
     tax_id = models.CharField(max_length=20, blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
-    customer_id = models.CharField(max_length=20,blank=True, null=True)
+    # customer_id = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.first_name

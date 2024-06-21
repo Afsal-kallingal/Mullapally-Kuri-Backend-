@@ -1,12 +1,13 @@
-# from django.contrib import admin
-# from apps.staff.models import *
+from django.contrib import admin
+from apps.target.models import *
 
 
 
-# class StaffAdmin(admin.ModelAdmin):
-#     list_display = ('id','full_name','address_line','dob','district','salary','rewards','designation','post','department','office_location','site','operating','date_added', 'creator',
-#     )
-# admin.site.register(Staff,StaffAdmin)
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ('auto_id', 'first_name', 'last_name', 'email', 'phone', 'billing_address',
+            'shipping_address', 'customer_type', 'tax_id', 'notes', 'is_active',
+    )
+admin.site.register(Customer,CustomerAdmin)
 
 # class CountryAdmin(admin.ModelAdmin):
 #     list_display = ('id','name')

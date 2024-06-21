@@ -1,5 +1,5 @@
 from apps.main.serializers import BaseModelSerializer
-from rest_framework import serializers
+from django.db import transaction
 from apps.target.models import *
 from apps.user_account.functions import validate_phone
 from apps.user_account.models import User
@@ -8,9 +8,32 @@ class CustomerSerializer(BaseModelSerializer):
     class Meta:
         model = Customer
         fields = [
-            'id', 'first_name', 'last_name', 'email', 'phone', 'billing_address',
-            'shipping_address', 'customer_type', 'tax_id', 'notes', 'is_active', 'customer_id'
+            'auto_id', 'first_name', 'last_name', 'email', 'phone', 'billing_address',
+            'shipping_address', 'customer_type', 'tax_id', 'notes', 'is_active', 
         ]
+        # read_only_fields = ('auto_id', 'customer_id')  # Make auto_id and customer_id read-only to prevent manual setting
+
+    # def create(self, validated_data):
+    #     # Ensure atomicity
+    #     with transaction.atomic():
+    #         # Fetch the highest current customer_id
+    #         last_customer = Customer.objects.all().order_by('customer_id').last()
+    #         if last_customer:
+    #             # Convert customer_id to int before incrementing
+    #             next_customer_id = int(last_customer.customer_id) + 1
+    #         else:
+    #             next_customer_id = 1  # If there are no customers, start with 1
+
+    #         # Assign the next customer_id
+    #         validated_data['customer_id'] = next_customer_id
+
+    #         # Debugging log to check the customer_id
+    #         print(f"Creating new customer with customer_id: {next_customer_id}")
+
+    #         # Create the new customer instance
+    #         customer = Customer.objects.create(**validated_data)
+        
+    #     return customer
 
 class TargetSerializer(BaseModelSerializer):
     # user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())

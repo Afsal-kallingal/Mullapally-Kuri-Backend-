@@ -47,7 +47,6 @@ class StaffViewSet(BaseModelViewSet):
         # #         return UpdateInvestorSerializer
         # elif self.action == 'list':
         #     return StafflistSerializer
-        
         else:
             return StaffSerializer
         
@@ -113,7 +112,6 @@ class DistrictViewSet(BaseModelViewSet):
             queryset = queryset.filter(state=self.request.GET.get("state"))
         return queryset
 
-    
 class DesignationViewSet(BaseModelViewSet):
     queryset = Designation.objects.all()
     serializer_class = DesignationSerializer
@@ -126,7 +124,7 @@ class DesignationViewSet(BaseModelViewSet):
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
-
+    
 class WorkRoleViewSet(BaseModelViewSet):
     queryset = WorkRole.objects.all()
     serializer_class = WorkRoleSerializer
@@ -139,7 +137,7 @@ class WorkRoleViewSet(BaseModelViewSet):
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
-
+    
 class DepartmentViewSet(BaseModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
@@ -152,7 +150,7 @@ class DepartmentViewSet(BaseModelViewSet):
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
-
+    
 class OfficeLocationViewSet(BaseModelViewSet):
     queryset = OfficeLocation.objects.all()
     serializer_class = OfficeLocationSerializer
