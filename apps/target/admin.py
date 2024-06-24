@@ -9,34 +9,15 @@ class CustomerAdmin(admin.ModelAdmin):
     )
 admin.site.register(Customer,CustomerAdmin)
 
-# class CountryAdmin(admin.ModelAdmin):
-#     list_display = ('id','name')
-# admin.site.register(Country,CountryAdmin)
 
-# class StateAdmin(admin.ModelAdmin):
-#     list_display = ('id','name')
-# admin.site.register(State,StateAdmin)
+# class TargetsAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'name', 'description', 'start_datetime', 'end_datetime', 
+#                     'target_amount', 'achieved_amount', 'user', 'customer', 'get_products', 'status')
 
-# class DistrictAdmin(admin.ModelAdmin):
-#     list_display = ('id','name')
-# admin.site.register(District,DistrictAdmin)
+#     def get_products(self, obj):
+#         return ", ".join([product.name for product in obj.products.all()])
 
-# class DesignationAdmin(admin.ModelAdmin):
-#     list_display = ('id','name','date_added', 'creator')
-# admin.site.register(Designation,DesignationAdmin)
+#     get_products.short_description = 'Products'
 
-# class RolesAdmin(admin.ModelAdmin):
-#     list_display = ('id','name','date_added', 'creator')
-# admin.site.register(WorkRole,RolesAdmin)
+# admin.site.register(Target, TargetsAdmin)
 
-# class DepartmentAdmin(admin.ModelAdmin):
-#     list_display = ('id','name','date_added', 'creator')
-# admin.site.register(Department,DepartmentAdmin)
-
-# class OfficeLocationAdmin(admin.ModelAdmin):
-#     list_display = ('id','address','date_added', 'creator')
-# admin.site.register(OfficeLocation,OfficeLocationAdmin)
-
-# class SiteAdmin(admin.ModelAdmin):
-#     list_display = ('id','name','date_added', 'creator')
-# admin.site.register(Site,SiteAdmin)

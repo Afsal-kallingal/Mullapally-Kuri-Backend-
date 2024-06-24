@@ -1,6 +1,7 @@
 
 from django.db import models
 from apps.main.models import BaseModel
+# from apps.product.models import Product
 
 
 class ProductCategory(BaseModel):
@@ -41,3 +42,17 @@ class Product(BaseModel):
 
     def __str__(self):
         return self.name
+    
+# class CustomerOrder(BaseModel):
+#     customer_name = models.ForeignKey(Customer, on_delete=models.CASCADE)
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+#     quantity = models.PositiveIntegerField()
+#     status = models.CharField(max_length=20, default='pending')
+#     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+#     def save(self, *args, **kwargs):
+#         self.total_amount = self.product.price * self.quantity
+#         super().save(*args, **kwargs)
+
+#     def __str__(self):
+#         return {self.customer_name} - {self.product.name} - {self.quantity} - {self.get_status_display()}

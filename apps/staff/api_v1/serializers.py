@@ -59,7 +59,7 @@ class StaffSerializer(BaseModelSerializer):
     country_name = serializers.CharField(source='district.state.country.name',read_only=True)
 
     class Meta:
-        model = Staff
+        model = Staff 
         fields = ['id','full_name','email','country_code','phone','designation_name','state_name','district_name','country_name','district_name','country_name','address_line','dob','district','salary','rewards','designation','post','department','office_location','site','operating',]
 
     def update(self, instance, validated_data):

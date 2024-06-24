@@ -20,7 +20,7 @@ class CustomerViewSet(BaseModelViewSet):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
     filter_backends = [SearchFilter]
-    search_fields = ['first_name','last_name','phone','shipping_address']
+    search_fields = ['first_name','last_name','phone','shipping_address','auto_id']
 
     def get_permissions(self):
         if self.action == 'create' or self.action == 'destroy':
@@ -37,12 +37,37 @@ class CustomerViewSet(BaseModelViewSet):
         instance.delete()
         return Response({"message": "Customer Deleted Successfully"}, status=status.HTTP_200_OK)
     
-class TargetViewSet(BaseModelViewSet):
+class SalesTargetViewSet(BaseModelViewSet):
     permission_classes = [IsAuthenticated ]
-    queryset = Target.objects.all()
-    serializer_class = TargetSerializer
-    filter_backends = [SearchFilter]
-    search_fields = ['name','customer__first_name']
+    queryset = SalesTarget.objects.all()
+    serializer_class = SalesTargetSerializer
+    # filter_backends = [SearchFilter]
+    # search_fields = ['salesman','customer__first_name']
+
+    def get_permissions(self):
+        if self.action == 'create' or self.action == 'destroy':
+            permission_classes = [IsAdmin | IsTargetAdmin]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
+    # def get_serializer_class(self):
+    #     if request.user.is_authenticated and request.user.target_admin:
+    #         # return True
+    #         return SalesmanSalesTargetUpdateSerializer
+    #     return SalesTargetSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response({"message": "Sales Target Deleted Successfully"}, status=status.HTTP_200_OK)
+  
+class CustomerRelationshipTargetViewSet(BaseModelViewSet):
+    permission_classes = [IsAuthenticated ]
+    queryset = CustomerRelationshipTarget.objects.all()
+    serializer_class = CustomerRelationshipTargetSerializer
+    # filter_backends = [SearchFilter]
+    # search_fields = ['salesman','customer__first_name']
 
     def get_permissions(self):
         if self.action == 'create' or self.action == 'destroy':
@@ -53,10 +78,7 @@ class TargetViewSet(BaseModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        user = instance.user
-        User.objects.filter(pk=user.pk).delete()
-        # user.delete()
         instance.delete()
-        return Response({"message": "Target Deleted Successfully"}, status=status.HTTP_200_OK)
-    
+        return Response({"message": "Customer Relationship Target Deleted Successfully"}, status=status.HTTP_200_OK)
+  
     
