@@ -3,12 +3,6 @@ from apps.target.models import *
 
 
 
-class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('auto_id', 'first_name', 'last_name', 'email', 'phone', 'billing_address',
-            'shipping_address', 'customer_type', 'tax_id', 'notes', 'is_active',
-    )
-admin.site.register(Customer,CustomerAdmin)
-
 
 # class TargetsAdmin(admin.ModelAdmin):
 #     list_display = ('id', 'name', 'description', 'start_datetime', 'end_datetime', 

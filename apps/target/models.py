@@ -10,27 +10,6 @@ STATUS_CHOICES = [
     ('rejected', 'Rejected'),
 ]
 
-class Customer(BaseModel):
-    CUSTOMER_TYPES = (
-        ('Individual', 'Individual'),
-        ('Business', 'Business'),
-    )
-
-    first_name = models.CharField(max_length=50,blank=True, null=True)
-    last_name = models.CharField(max_length=50,blank=True, null=True)
-    email = models.EmailField(max_length=25,blank=True, null=True)
-    phone = models.CharField(max_length=25,unique=True)
-    billing_address = models.TextField(blank=True, null=True)
-    shipping_address = models.TextField(blank=True, null=True)
-    customer_type = models.CharField(max_length=20, choices=CUSTOMER_TYPES, default='Individual')
-    tax_id = models.CharField(max_length=20, blank=True, null=True)
-    notes = models.TextField(blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    # customer_id = models.IntegerField(blank=True, null=True)
-
-    def __str__(self):
-        return self.first_name
-    
 # class Target(BaseModel):
 #     STATUS_CHOICES = (
 #         ('Pending', 'Pending'),
@@ -80,3 +59,20 @@ class CustomerRelationshipTarget(BaseModel):
 
     def __str__(self):
         return {self.salesman.full_name} - {self.period}
+    
+class StaffTask(BaseModel):
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
+    )
+
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
+    task_name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    due_date = models.DateField()
+    status = models.CharField(choices=STATUS_CHOICES, default='pending', max_length=20)
+    priority = models.CharField(choices=[('low', 'Low'), ('medium', 'Medium'), ('high', 'High')], default='medium', max_length=10)
+
+    def __str__(self):
+        return {self.task_name} - {self.staff.full_name}

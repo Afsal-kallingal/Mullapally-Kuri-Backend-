@@ -8,12 +8,9 @@ if settings.DEBUG:
 else:
     router = SimpleRouter()
 
-router.register('customer',CustomerViewSet, basename='customer-viewset'),
 router.register('sales-target',SalesTargetViewSet, basename='sales-target'),
 router.register('customer-relationship-target',CustomerRelationshipTargetViewSet, basename='customer-relationship-target'),
-
-
-
+router.register('task',StaffDailyTaskViewSet, basename='task'),
 
 
 urlpatterns = [

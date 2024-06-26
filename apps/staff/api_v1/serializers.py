@@ -145,3 +145,39 @@ class SiteSerializer(BaseModelSerializer):
 #     class Meta:
 #         model = Report_To
 #         fields = '__all__'
+
+class CustomerSerializer(BaseModelSerializer):
+    class Meta:
+        model = Customer
+        fields = [
+            'id','auto_id', 'full_name', 'email','phone','phone_number2','billing_address',
+            'shipping_address', 'customer_type', 'tax_id', 'notes', 'is_active', 
+        ]
+
+    # def create(self, validated_data):
+    #     full_name = validated_data.pop('full_name', None)
+    #     country_code = validated_data.pop('country_code', None)
+    #     phone = validated_data.pop('phone', None)
+    #     email = validated_data.pop('email', None)
+    #     password = validated_data.pop('password', None)
+
+    #     if validate_phone(country_code, phone):
+    #         user_account = User(
+    #             full_name=full_name,
+    #             country_code=country_code,
+    #             phone=phone,
+    #             email=email,
+    #             username=str(str(country_code) + str(phone)),
+    #             phone_verified=True
+    #         )
+    #         user_account.set_password(password)  # Hash the password
+    #         user_account.save()
+
+    #         # Set the user in the validated_data dictionary to be used by the super().create() call
+    #         validated_data["user"] = user_account
+
+    #         instance = super().create(validated_data)
+    #     else:
+    #         raise serializers.ValidationError("Phone number already exists!")
+
+    #     return instance

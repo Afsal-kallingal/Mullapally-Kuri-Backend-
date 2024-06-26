@@ -6,13 +6,6 @@ from apps.user_account.functions import validate_phone
 from apps.user_account.models import User
 from rest_framework import serializers
 
-class CustomerSerializer(BaseModelSerializer):
-    class Meta:
-        model = Customer
-        fields = [
-            'id','auto_id', 'first_name', 'last_name', 'email', 'phone', 'billing_address',
-            'shipping_address', 'customer_type', 'tax_id', 'notes', 'is_active', 
-        ]
         # read_only_fields = ('auto_id', 'customer_id')  # Make auto_id and customer_id read-only to prevent manual setting
 
     # def create(self, validated_data):
@@ -180,3 +173,42 @@ class SalesmanCustomerTargetUpdateSerializer(BaseModelSerializer):
         instance.reply = validated_data.get('reply', instance.reply)
         instance.save()
         return instance
+    
+class DailyTaskSerializer(BaseModelSerializer):
+    class Meta:
+        model = StaffTask
+        fields = [
+            'id',
+            'staff',
+            'creator',
+            'date_added',
+            'task_name',
+            'description',
+            'due_date',
+            'status',
+            'priority'
+        ]
+
+    def update(self, instance, validated_data):
+        instance.staff = validated_data.get('staff', instance.staff)
+        instance.task_name = validated_data.get('task_name', instance.task_name)
+        instance.description = validated_data.get('description', instance.description)
+        instance.due_date = validated_data.get('due_date', instance.due_date)
+        instance.status = validated_data.get('status', instance.status)
+        instance.priority = validated_data.get('priority', instance.priority)
+        instance.save()
+        return instance
+    
+# class ListViewDailyTaskSerializer(BaseModelSerializer):
+#     class Meta:
+#         model = StaffTask
+#         fields = [
+#             'id',
+#             'creator',
+#             'staff',
+#             'task_name',
+#             'description',
+#             'due_date',
+#             'status',
+#             'priority'
+#         ]

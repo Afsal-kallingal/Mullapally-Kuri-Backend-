@@ -189,3 +189,27 @@ class SiteViewSet(BaseModelViewSet):
 #         else:
 #             permission_classes = [IsAuthenticated]
 #         return [permission() for permission in permission_classes]
+
+
+class CustomerViewSet(BaseModelViewSet):
+    permission_classes = [AllowAny ]
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['first_name','last_name','phone','shipping_address','auto_id']
+
+    # def get_permissions(self):
+    #     if self.action == 'create' or self.action == 'destroy':
+    #         permission_classes = [IsAdmin | IsTargetAdmin]
+    #     else:
+    #         permission_classes = [IsAuthenticated]
+    #     return [permission() for permission in permission_classes]
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        user = instance.user
+        User.objects.filter(pk=user.pk).delete()
+        # user.delete()
+        instance.delete()
+        return Response({"message": "Customer Deleted Successfully"}, status=status.HTTP_200_OK)
+    

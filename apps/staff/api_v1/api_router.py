@@ -18,6 +18,8 @@ router.register('sites', SiteViewSet, basename='site-viewset'),
 router.register("country",CountryViewSet,basename='country-viewset'),
 router.register("state",StateViewSet,basename='state-viewset'),
 router.register("district",DistrictViewSet,basename='district-viewset'),
+router.register('customer',CustomerViewSet, basename='customer-viewset'),
+
 
 # router.register('reports-to', ReportToViewSet, basename='reportto-viewset')
 # router.register("tudo",TudoViewSet,basename='tudo'),
