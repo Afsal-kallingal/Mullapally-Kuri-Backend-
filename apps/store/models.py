@@ -1,9 +1,6 @@
-
-from django.db import models
-from apps.main.models import BaseModel
-from apps.product.models import Product
+# from django.db import models
+# from apps.main.models import BaseModel
 # from apps.product.models import Product
-
 
 # class Purchase(models.Model):
 #     customer = models.ForeignKey(User, on_delete=models.CASCADE)

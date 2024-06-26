@@ -113,6 +113,8 @@ LOCAL_APPS = [
     "apps.dashboard",
     "apps.product",
     "apps.target",
+    "apps.punching",
+    "apps.salary_finance",
     # "useraccount",
     # Your stuff: custom apps go here
 ]
