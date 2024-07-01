@@ -1,9 +1,11 @@
-# from rest_framework import generics
-# from rest_framework.response import Response
-# from apps.main.viewsets import BaseModelViewSet
-# from rest_framework.permissions import IsAuthenticated,AllowAny
-# from apps.product.models import *
-# from apps.product.api_v1.serializers import *
+from apps.main.viewsets import BaseModelViewSet
+from rest_framework.permissions import IsAuthenticated,AllowAny
+from apps.punching.models import Attendance
+from apps.punching.api_v1.serializers import AttendanceSerializer
+from django.utils import timezone
+from rest_framework.decorators import action
+from rest_framework import viewsets, status
+from rest_framework.response import Response
 # from apps.user_account.models import User
 # from rest_framework.filters import SearchFilter
 # from apps.user_account.functions import IsAdmin
@@ -13,91 +15,40 @@
 # from drf_yasg import openapi
 
 
-# class ProductViewSet(BaseModelViewSet):
-#     permission_classes = [IsAuthenticated ]
-#     queryset = Product.objects.all()
-#     serializer_class = ProductSerializer
-#     filter_backends = [SearchFilter]
-#     search_fields = ['name','description']
+class AttendanceViewSet(BaseModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = Attendance.objects.all()
+    serializer_class = AttendanceSerializer
 
-#     def get_permissions(self):
-#         if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
-#             permission_classes = [IsAdmin | IsProductAdmin]
-#         else:
-#             permission_classes = [IsAuthenticated]
-#         return [permission() for permission in permission_classes]
+    @action(detail=False, methods=['post'])
+    def punch_in(self, request):
+        user = request.user
+        location = request.data.get('location')
+        punch_type = request.data.get('punch_type', 'ESSL')
 
-#     def destroy(self, request, *args, **kwargs):
-#         instance = self.get_object()
-#         user = instance.user
-#         User.objects.filter(pk=user.pk).delete()
-#         # user.delete()
-#         instance.delete()
-#         return Response({"message": "Product Deleted Successfully"}, status=status.HTTP_200_OK)
+        if not location:
+            return Response({'error': 'Location is required'}, status=status.HTTP_400_BAD_REQUEST)
 
+        attendance = Attendance.objects.create(
+            user=user,
+            location=location,
+            time_in=timezone.now(),
+            punch_type=punch_type
+        )
+        serializer = self.get_serializer(attendance)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-# class ProductCategoryViewSet(BaseModelViewSet):
-#     permission_classes = [IsAuthenticated ]
-#     queryset = ProductCategory.objects.all()
-#     serializer_class = CategorySerializer
-#     filter_backends = [SearchFilter]
-#     search_fields = ['name','description']
-
-#     def get_permissions(self):
-#         if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
-#             permission_classes = [IsAdmin | IsProductAdmin]
-#         else:
-#             permission_classes = [IsAuthenticated]
-#         return [permission() for permission in permission_classes]
-
-#     def destroy(self, request, *args, **kwargs):
-#         instance = self.get_object()
-#         user = instance.user
-#         User.objects.filter(pk=user.pk).delete()
-#         # user.delete()
-#         instance.delete()
-#         return Response({"message": "Product Category Deleted Successfully"}, status=status.HTTP_200_OK)
-
-# class ProductBrandViewSet(BaseModelViewSet):
-#     permission_classes = [IsAuthenticated ]
-#     queryset = ProductBrand.objects.all()
-#     serializer_class = BrandSerializer
-#     filter_backends = [SearchFilter]
-#     search_fields = ['name','description']
-
-#     def get_permissions(self):
-#         if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
-#             permission_classes = [IsAdmin | IsProductAdmin]
-#         else:
-#             permission_classes = [IsAuthenticated]
-#         return [permission() for permission in permission_classes]
-
-#     def destroy(self, request, *args, **kwargs):
-#         instance = self.get_object()
-#         user = instance.user
-#         User.objects.filter(pk=user.pk).delete()
-#         # user.delete()
-#         instance.delete()
-#         return Response({"message": "Product Category Deleted Successfully"}, status=status.HTTP_200_OK)
-
-# class SupplierViewSet(BaseModelViewSet):
-#     permission_classes = [IsAuthenticated ]
-#     queryset = Supplier.objects.all()
-#     serializer_class = SupplierSerializer
-#     filter_backends = [SearchFilter]
-#     search_fields = ['name','description']
-
-#     def get_permissions(self):
-#         if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
-#             permission_classes = [IsAdmin | IsProductAdmin]
-#         else:
-#             permission_classes = [IsAuthenticated]
-#         return [permission() for permission in permission_classes]
-
-#     def destroy(self, request, *args, **kwargs):
-#         instance = self.get_object()
-#         user = instance.user
-#         User.objects.filter(pk=user.pk).delete()
-#         # user.delete()
-#         instance.delete()
-#         return Response({"message": "Supplier Deleted Successfully"}, status=status.HTTP_200_OK)
+    @action(detail=True, methods=['post'])
+    def punch_out(self, request, pk=None):
+        try:
+            attendance = self.get_object()
+        except Attendance.DoesNotExist:
+            return Response({'error': 'Attendance record not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        if attendance.time_out:
+            return Response({'error': 'Already punched out'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        attendance.time_out = timezone.now()
+        attendance.save()
+        serializer = self.get_serializer(attendance)
+        return Response(serializer.data, status=status.HTTP_200_OK)

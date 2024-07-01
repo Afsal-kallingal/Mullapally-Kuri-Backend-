@@ -79,7 +79,7 @@ class SalesTargetListViewSerializer(BaseModelSerializer):
     avg_transaction_value_target = serializers.DecimalField(source='sales_target.avg_transaction_value_target', max_digits=10, decimal_places=2)
     description = serializers.CharField(source='sales_target.description')
     target_period = serializers.CharField(source='sales_target.target_period')
-    progress = serializers.DecimalField(source='sales_target.progress')
+    progress = serializers.DecimalField(source='sales_target.progress', max_digits=5, decimal_places=2)  # Specify max_digits and decimal_places
     last_updated = serializers.DateTimeField(source='sales_target.last_updated')
 
     class Meta:
@@ -102,7 +102,7 @@ class SalesTargetListViewSerializer(BaseModelSerializer):
             'status',
             'notes'
         ]
-
+        
 class CustomerRelationshipTargetSerializer(BaseModelSerializer):
     class Meta:
         model = CustomerRelationshipTarget

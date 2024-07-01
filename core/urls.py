@@ -12,8 +12,7 @@ urlpatterns = [
     path("api/v1/staff/", include("apps.staff.api_v1.api_router", namespace="investor_api_router_v1")),
     path("api/v1/store/", include("apps.product.api_v1.api_router", namespace="product_api_router_v1")),
     path("api/v1/target/", include("apps.sales_target.api_v1.api_router", namespace="target_api_router_v1")),
-    # path("api/v1/", include("apps.dashboard.api_v1.api_router", namespace="dashboard_api_router_v1")),
-
+    path("api/v1/attendance/", include("apps.punching.api_v1.api_router", namespace="punching_api_router_v1")),
 
 ]
 
