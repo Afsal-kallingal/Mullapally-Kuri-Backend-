@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.product.models import *
+# from apps.product.models import *
 
 
 

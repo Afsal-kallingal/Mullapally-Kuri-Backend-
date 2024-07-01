@@ -191,7 +191,7 @@ class SiteViewSet(BaseModelViewSet):
 #         return [permission() for permission in permission_classes]
 
 
-class CustomerViewSet(BaseModelViewSet):
+class CustomersViewSet(BaseModelViewSet):
     permission_classes = [AllowAny ]
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer

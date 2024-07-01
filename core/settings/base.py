@@ -112,9 +112,9 @@ LOCAL_APPS = [
     "apps.staff",
     "apps.dashboard",
     "apps.product",
-    "apps.target",
-    "apps.punching",
-    "apps.salary_finance",
+    "apps.sales_target",
+    # "apps.punching",
+    # "apps.salary_staff",
     # "useraccount",
     # Your stuff: custom apps go here
 ]
@@ -196,7 +196,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://127.0.0.1:3000",
     "http://localhost:3000",
-    "http://snowhillsvythiri.com",
+    # "http://snowhillsvythiri.com",
 ]
 
 
