@@ -78,6 +78,13 @@ def get_auto_id(model):
     return auto_id
 
 
+def get_auto_id(model):
+    """Generate a unique auto_id for the given model_class."""
+    last_instance = model.objects.last()
+    if last_instance:
+        return last_instance.auto_id + 1
+    else:
+        return 1 
 # def get_voucher_number(institute):
 #     voucher_number = 1
 #     latest_voucher_numbers =  InstituteLedgerItem.objects.filter(institute_ledger__institute=institute.id,transaction_type="debit").order_by("-auto_id")[:1]

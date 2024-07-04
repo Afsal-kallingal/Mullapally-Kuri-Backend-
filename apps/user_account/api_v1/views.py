@@ -32,7 +32,6 @@ User = get_user_model()
 #     # RetrieveUpdateDestroyAPIView,
 # )
 
-
 class UserViewSet(BaseModelViewSet):
     permission_classes = [IsAdmin]
     serializer_class = UserSerializer

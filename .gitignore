@@ -1,7 +1,17 @@
+# Ignore the SQLite database file
 db.sqlite3
-*/media
+
+# Ignore migrations files
 */migrations/0*
 */__pycache__
 **/__pycache__
-# /db.sqlite3
-/media
+
+# Ignore Python cache files
+*.py[cod]
+__pycache__/
+
+# Ignore virtual environment directory
+venv/
+
+# Ignore environment variable files
+.env

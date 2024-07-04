@@ -49,26 +49,39 @@ USE_TZ = True
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
-# DATABASES = {
-#     "default": env.db(
-#         "DATABASE_URL",
-#         default="postgres://hashid:hashid@127.0.0.1:5432/hashid5",
-#     ),
-# }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-   
+
+# DATABASES={
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'nextgen_erp',
+#         'USER': 'postgres',
+#         'PASSWORD':'10Hassan10',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#         # 'DISABLE_SERVER_SIDE_CURSORS': True,
+#     }
+# }
+
+# DATABASES={
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': env('dbNAME'),
+#         'USER': env('dbUSER'),
+#         'PASSWORD': env('dbPASSWORD'),
+#         'HOST': env('dbHOST'),
+#         'PORT': env('dbPORT'),
+#         'DISABLE_SERVER_SIDE_CURSORS': True,
+#     }
+# }
+
+
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -110,10 +123,11 @@ LOCAL_APPS = [
     "apps.user_account",
     "apps.main",
     "apps.staff",
-    "apps.dashboard",
-    "apps.product",
-    "apps.sales_target",
-    "apps.punching",
+    "apps.task",
+    # "apps.dashboard",
+    # "apps.product",
+    # "apps.sales_target",
+    # "apps.punching",
     # "apps.salary_staff",
     # "useraccount",
     # Your stuff: custom apps go here
@@ -196,14 +210,13 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://127.0.0.1:3000",
     "http://localhost:3000",
-    # "http://snowhillsvythiri.com",
+    # "https://read-and-write.example.com",
 ]
+# CORS_ALLOW_ALL_ORIGINS: True
 
-
-CORS_ORIGIN_ALLOW_ALL = False
+# CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
-
-# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOW_HEADERS = [
     'accept',
@@ -299,7 +312,7 @@ EMAIL_TIMEOUT = 5
 # Django Admin URL.
 ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = [("""Afsal""", "afsal.osperb@gmail.com"),("""Hashid""", "hashid.osperb@gmail.com")]
+ADMINS = [("""Mohammed Afsal""", "afsalkallingal77@gmail.com")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 # https://cookiecutter-django.readthedocs.io/en/latest/settings.html#other-environment-settings

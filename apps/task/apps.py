@@ -3,8 +3,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 class TargetConfig(AppConfig):
-    name = "apps.sales_target"
-    verbose_name = _("sales_target")
+    name = "apps.task"
+    verbose_name = _("task")
 
     # def ready(self):
     #     try:
