@@ -14,7 +14,29 @@ class SaleTargetSerializer(BaseModelSerializer):
 class SalesmanSalesTargetStatusSerializer(BaseModelSerializer):
     class Meta:
         model = SalesmanSalesTargetStatus
-        fields = '__all__'
+        fields = [
+            'id',
+            'sales_target',  # This should match the related name
+            'completion_date',
+            'status',
+            'notes',
+            'last_updated'
+        ]
+
+    def validate(self, data):
+        # Add validation logic if needed
+        return data
+
+    def create(self, validated_data):
+        return SalesmanSalesTargetStatus.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.completion_date = validated_data.get('completion_date', instance.completion_date)
+        instance.status = validated_data.get('status', instance.status)
+        instance.notes = validated_data.get('notes', instance.notes)
+        instance.last_updated = timezone.now()
+        instance.save()
+        return instance
 
 class CustomerRelationshipTargetSerializer(BaseModelSerializer):
     class Meta:
@@ -50,14 +72,13 @@ class SalesmanTaskStatusSerializer(BaseModelSerializer):
 #     class Meta:
 #         abstract = True
 
-# class SalesTargetSerializer(TaskBaseModelSerializer):
+# class SalesTargetSerializer(BaseModelSerializer):
 #     class Meta:
-#         model = SalesTarget
+#         model = SaleTarget
 #         fields = [
 #             'id',
 #             'salesman',
 #             'target_name',
-#             'created_at',
 #             'due_date',
 #             'sales_target_revenue',
 #             'units_sold_target',
@@ -69,10 +90,11 @@ class SalesmanTaskStatusSerializer(BaseModelSerializer):
 #         ]
 
 #     def validate(self, data):
+#         # You can add validation logic here if needed
 #         return data
 
 #     def create(self, validated_data):
-#         return SalesTarget.objects.create(**validated_data)
+#         return SaleTarget.objects.create(**validated_data)
 
 #     def update(self, instance, validated_data):
 #         instance.salesman = validated_data.get('salesman', instance.salesman)
@@ -88,32 +110,32 @@ class SalesmanTaskStatusSerializer(BaseModelSerializer):
 #         instance.save()
 #         return instance
 
-# # class SalesmanSalesTargetStatusSerializer(TaskBaseModelSerializer):
-# #     class Meta:
-# #         model = SalesmanSalesTargetStatus
-# #         fields = [
-# #             'id',
-# #             'sales_target',
-# #             'completion_date',
-# #             'status',
-# #             'notes',
-# #             'last_updated'
-# #         ]
+# class SalesmanSalesTargetStatusSerializer(BaseModelSerializer):
+#     class Meta:
+#         model = SalesmanSalesTargetStatus
+#         fields = [
+#             'id',
+#             'sales_target',
+#             'completion_date',
+#             'status',
+#             'notes',
+#             'last_updated'
+#         ]
 
-# #     def validate(self, data):
-# #         return data
+#     def validate(self, data):
+#         return data
 
-# #     def create(self, validated_data):
-# #         return SalesmanSalesTargetStatus.objects.create(**validated_data)
+#     def create(self, validated_data):
+#         return SalesmanSalesTargetStatus.objects.create(**validated_data)
 
-# #     def update(self, instance, validated_data):
-# #         instance.sales_target = validated_data.get('sales_target', instance.sales_target)
-# #         instance.completion_date = validated_data.get('completion_date', instance.completion_date)
-# #         instance.status = validated_data.get('status', instance.status)
-# #         instance.notes = validated_data.get('notes', instance.notes)
-# #         instance.last_updated = timezone.now()
-# #         instance.save()
-# #         return instance
+#     def update(self, instance, validated_data):
+#         instance.sales_target = validated_data.get('sales_target', instance.sales_target)
+#         instance.completion_date = validated_data.get('completion_date', instance.completion_date)
+#         instance.status = validated_data.get('status', instance.status)
+#         instance.notes = validated_data.get('notes', instance.notes)
+#         instance.last_updated = timezone.now()
+#         instance.save()
+#         return instance
     
 # class SalesTargetListViewSerializer(TaskBaseModelSerializer):
 #     # salesman = serializers.CharField(source='sales_target.salesman.username')

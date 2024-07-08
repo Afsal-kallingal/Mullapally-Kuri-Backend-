@@ -3,15 +3,17 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from apps.user_account.models import User
 
+
 class BaseModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    auto_id = models.PositiveIntegerField(db_index = True,unique=True)
+    auto_id = models.IntegerField(db_index = True,unique=True)
     date_added = models.DateTimeField(auto_now_add=True)
-    creator = models.ForeignKey(User, on_delete=models.SET_NULL,null=True,blank=True,default=1)
+    creator = models.ForeignKey(User, on_delete=models.SET_NULL,null=True,blank=True,related_name="+")
     is_deleted = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
+
 
 class CronjobCall(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

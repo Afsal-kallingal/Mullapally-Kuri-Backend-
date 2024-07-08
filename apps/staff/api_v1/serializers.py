@@ -1,8 +1,12 @@
 from apps.main.serializers import BaseModelSerializer
 from rest_framework import serializers
 from apps.staff.models import *
+from django.db import IntegrityError
 from apps.user_account.functions import validate_phone
 from apps.user_account.models import User
+from rest_framework.exceptions import ValidationError
+from apps.main.functions import get_auto_id
+
 
 class CreateStaffSerializer(BaseModelSerializer):
     full_name = serializers.CharField(max_length=128, write_only=True)
@@ -131,11 +135,25 @@ class DepartmentSerializer(BaseModelSerializer):
         model = Department
         fields = '__all__'
 
+    def create(self, validated_data):
+        try:
+            return super().create(validated_data)
+        except IntegrityError as e:
+            raise ValidationError({"detail": str(e)})
+
 class OfficeLocationSerializer(BaseModelSerializer):
     class Meta:
         model = OfficeLocation
         fields = '__all__'
 
+    # def create(self, validated_data):
+    #     officelocation = OfficeLocation.objects.create(
+    #         **validated_data,
+    #         auto_id = get_auto_id(OfficeLocation),
+    #         creator = self.context['request'].user
+    #     )
+    #     return zakat
+    
 class SiteSerializer(BaseModelSerializer):
     class Meta:
         model = Site

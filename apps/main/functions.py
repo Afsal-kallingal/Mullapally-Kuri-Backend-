@@ -67,24 +67,20 @@ def get_client_ip(request):
 #                 message += str(err) + "|"
 #     return message[:-1]
 
-
-
 def get_auto_id(model):
-    auto_id = 1
-    latest_auto_id =  model.objects.all().order_by("-auto_id")[:1]
-    if latest_auto_id:
-        for auto in latest_auto_id:
-            auto_id = auto.auto_id + 1
-    return auto_id
-
-
-def get_auto_id(model):
-    """Generate a unique auto_id for the given model_class."""
-    last_instance = model.objects.last()
-    if last_instance:
-        return last_instance.auto_id + 1
+    queryset = model.objects.all()
+    if queryset.exists():
+        return int(queryset.order_by("-auto_id","-date_added").first().auto_id) + 1
     else:
-        return 1 
+        return 1
+
+# def get_auto_id(model):
+#     """Generate a unique auto_id for the given model_class."""
+#     last_instance = model.objects.last()
+#     if last_instance:
+#         return last_instance.auto_id + 1
+#     else:
+#         return 1 
 # def get_voucher_number(institute):
 #     voucher_number = 1
 #     latest_voucher_numbers =  InstituteLedgerItem.objects.filter(institute_ledger__institute=institute.id,transaction_type="debit").order_by("-auto_id")[:1]
@@ -298,17 +294,13 @@ def get_auto_id(model):
 
 # 28/10/2022
 def sendSMS(numbers, message,):
-    r = requests.post('https://mail-sender.vingb.com/send_sms_view/5a187066-5773-49a7-9edd-474d8754665b/9202afdb-ef44-4c6b-ad1f-667c09ea6d85/', data={
-            "phone":numbers,
-            "message":message,
-            "sender":"OSPERB"
-        })
+    r="sent sms"
+    # r = requests.post('https://mail-sender.vingb.com/send_sms_view/5a187066-5773-49a7-9edd-474d8754665b/9202afdb-ef44-4c6b-ad1f-667c09ea6d85/', data={
+    #         "phone":numbers,
+    #         "message":message,
+    #         "sender":"OSPERB"
+    #     })
     return(r)
-
-
-
-
-
 
 # def sendSMS(apikey, numbers, sender, message,):
 #     data =  urllib.parse.urlencode({'apikey': apikey, 'numbers': numbers,

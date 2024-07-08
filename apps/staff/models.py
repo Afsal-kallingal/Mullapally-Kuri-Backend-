@@ -23,25 +23,25 @@ class District(BaseModel):
         return self.name
 
 class Designation(BaseModel):
-    name = models.CharField(max_length=125)
+    name = models.CharField(max_length=125,unique=True)
 
     def __str__(self):
         return self.name
 
 class WorkRole(BaseModel):  
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,unique=True)
 
     def __str__(self):
         return self.name
 
 class Department(BaseModel):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,unique=True)
 
     def __str__(self):
         return self.name
 
 class OfficeLocation(BaseModel):
-    address = models.CharField(max_length=255)
+    address = models.CharField(max_length=255,unique=True)
 
     def __str__(self):
         return self.address

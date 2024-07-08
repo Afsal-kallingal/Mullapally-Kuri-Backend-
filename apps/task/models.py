@@ -17,7 +17,7 @@ class SaleTarget(BaseModel):
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.salesman.get_full_name()} - {self.target_name} - {self.target_period}"
+        return self.target_name
 
     def get_due_datetime(self):
         return timezone.make_aware(self.due_date)
@@ -29,15 +29,14 @@ class SalesmanSalesTargetStatus(BaseModel):
         ('completed', 'Completed'),
     ]
 
-    sales_target = models.ForeignKey(SaleTarget, on_delete=models.CASCADE, related_name='target_statuses')
+    sales_target = models.ForeignKey(SaleTarget, on_delete=models.CASCADE, related_name='sales_target_status')
     completion_date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(choices=STATUS_CHOICES, default='pending', max_length=20)
     notes = models.TextField(blank=True, null=True)
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.sales_target.target_name} - {self.status}"
-
+        return self.sales_target.target_name
     def mark_completed(self):
         self.status = 'completed'
         self.completion_date = timezone.now()
@@ -57,7 +56,8 @@ class CustomerRelationshipTarget(BaseModel):
     description = models.TextField(blank=True)
 
     def __str__(self):
-        return {self.salesman.get_full_name()} - {self.target_period}
+        # return {self.salesman.get_full_name()} - {self.target_period}
+        return self.target_name
 
     def get_due_datetime(self):
         return timezone.make_aware(self.due_date)
@@ -76,8 +76,7 @@ class SalesmanCustomerRelationshipTargetStatus(BaseModel):
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.customer_relationship_target.salesman.get_full_name()} - {self.customer_relationship_target.target_name} - {self.status} - {self.last_updated}"
-
+        return self.customer_relationship_target.salesman.get_full_name()
     def mark_completed(self):
         self.status = 'completed'
         self.completion_date = timezone.now()
@@ -101,7 +100,7 @@ class StaffTask(BaseModel):
     image = models.ImageField(upload_to='task_images/', null=True, blank=True)
 
     def __str__(self):
-        return {self.task_name} 
+        return self.task_name
 
     def get_due_date(self):
         return timezone.make_aware(self.due_date) if self.due_date else None
