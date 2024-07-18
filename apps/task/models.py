@@ -104,6 +104,13 @@ class StaffTask(BaseModel):
 
     def get_due_date(self):
         return timezone.make_aware(self.due_date) if self.due_date else None
+    
+    # def task_history(self,staff):
+    #     # Create a task history entry
+    #     TaskHistory.objects.create(
+    #         task=self,
+    #         changed_by=staff,
+    #     )
 
 class SalesmanTaskStatus(BaseModel):
     STATUS_CHOICES = [
@@ -119,9 +126,19 @@ class SalesmanTaskStatus(BaseModel):
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.task.task_name} - {self.status}"
+        return self.task.task_name
 
     def mark_completed(self):
         self.status = 'completed'
         self.completion_date = timezone.now()
         self.save()
+
+
+# class TaskHistory(models.Model):
+#     task = models.ForeignKey(StaffTask, on_delete=models.CASCADE, related_name='history')
+#     changed_by = models.ForeignKey(User, on_delete=models.CASCADE)
+#     change_date = models.DateTimeField(auto_now_add=True)
+#     change_description = models.TextField(null=True,blank=True)
+
+#     def __str__(self):
+#         return f"{self.task.task_name} changed by {self.changed_by.username}"

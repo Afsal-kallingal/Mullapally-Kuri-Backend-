@@ -75,7 +75,7 @@ class Staff(BaseModel):
     operating = models.CharField(max_length=10, choices=OPERATING_CHOICES)
 
     def __str__(self):
-        return self.full_name
+        return self.user.full_name
 
 class Customer(BaseModel):
     CUSTOMER_TYPES = (

@@ -168,7 +168,7 @@ class CustomerSerializer(BaseModelSerializer):
     class Meta:
         model = Customer
         fields = [
-            'id','auto_id', 'full_name', 'email','phone','phone_number2','billing_address',
+            'id', 'full_name', 'email','phone','phone_number2','billing_address',
             'shipping_address', 'customer_type', 'tax_id', 'notes', 'is_active', 
         ]
 

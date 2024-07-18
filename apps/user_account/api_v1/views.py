@@ -33,26 +33,33 @@ User = get_user_model()
 # )
 
 class UserViewSet(BaseModelViewSet):
-    permission_classes = [IsAdmin]
+    permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
     queryset = User.objects.all()
     lookup_field = "username"
     filter_backends = [SearchFilter]
     search_fields = ['username','phone','email','full_name']
 
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_admin:
-            return User.objects.all()
-        else:
-            return User.objects.filter(pk=user.pk)
-
     def get_permissions(self):
-        if self.action == 'destroy':
-            permission_classes = [IsAdmin]
+        if self.action == 'create' or self.action == 'destroy' or self.action == 'update':
+            permission_classes = [IsAdmin ]
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     if user.is_admin:
+    #         return User.objects.all()
+    #     else:
+    #         return User.objects.filter(pk=user.pk)
+
+    # def get_permissions(self):
+    #     if self.action == 'destroy':
+    #         permission_classes = [IsAdmin]
+    #     else:
+    #         permission_classes = [IsAuthenticated]
+    #     return [permission() for permission in permission_classes]
     
 
 @csrf_exempt
@@ -429,10 +436,9 @@ def login_phone_pass(request):
                 token = Token.objects.create(user=user).key
 
             save_login_history(request,user,"phone-pass login")
-            
             response_data = {'user_id': user.pk, 'token': token}
-            print(token)
-            print(status.HTTP_200_OK)
+            if user.is_admin:
+                response_data['role'] = 'admin'
             return Response(response_data, status=status.HTTP_200_OK)
             
         else:

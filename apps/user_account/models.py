@@ -132,9 +132,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _('users')
         swappable = 'AUTH_USER_MODEL'
 
+    # def __str__(self):
+    #     return str(self.get_username())
     def __str__(self):
-        return str(self.get_username())
-
+        return self.full_name if self.full_name else self.get_username()
+    
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
