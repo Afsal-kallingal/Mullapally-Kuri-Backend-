@@ -66,7 +66,7 @@ class ListViewStaffTaskSerializer(BaseModelSerializer):
 
     class Meta:
         model = StaffTask
-        fields = ['staff','date_added','staff_name','task_name','creator_name','created_at','target_period','description','due_date','priority','audio','image']
+        fields = ['id','staff','date_added','staff_name','task_name','creator_name','created_at','target_period','description','due_date','priority','audio','image','document','contact_file']
 
 class ListViewResponseStaffTaskSerializer(BaseModelSerializer):
     task_name = serializers.CharField(source='task.task_name', read_only=True)
@@ -80,7 +80,7 @@ class ListViewResponseStaffTaskSerializer(BaseModelSerializer):
     class Meta:
         model = SalesmanTaskStatus
         fields = [
-            'task', 'status', 'notes', 'completion_date', 'last_updated','assigned_staff',
+            'task','id', 'status', 'notes', 'completion_date', 'last_updated','assigned_staff',
             'task_name', 'task_description', 'task_starting_time', 'task_creator','task_duedate','task_created_time'
         ]
 
@@ -100,6 +100,7 @@ class ListViewResponseSalesTargetSerializer(BaseModelSerializer):
     class Meta:
         model = SalesmanSalesTargetStatus
         fields = [
+            'id',
             'sales_target',
             'completion_date',
             'status',
@@ -135,6 +136,7 @@ class ListViewCustomerRelationshipSerializer(BaseModelSerializer):
     class Meta:
         model = SalesmanCustomerRelationshipTargetStatus
         fields = [
+            'id',
             'customer_relationship_target',
             'completion_date',
             'status',

@@ -98,6 +98,8 @@ class StaffTask(BaseModel):
     priority = models.CharField(choices=PRIORITY_CHOICES, default='medium', max_length=10)
     audio = models.FileField(upload_to='task_audio/', null=True, blank=True)
     image = models.ImageField(upload_to='task_images/', null=True, blank=True)
+    document = models.FileField(upload_to='task_documents/', null=True, blank=True)
+    contact_file = models.FileField(upload_to='task_contacts/', null=True, blank=True)
 
     def __str__(self):
         return self.task_name
