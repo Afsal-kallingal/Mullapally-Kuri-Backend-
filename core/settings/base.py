@@ -60,7 +60,7 @@ USE_TZ = True
 DATABASES={
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'nextgen',
+        'NAME': 'nextgentable',
         'USER': 'afsal',
         'PASSWORD':'Afsal@samas1',
         'HOST': 'localhost',
