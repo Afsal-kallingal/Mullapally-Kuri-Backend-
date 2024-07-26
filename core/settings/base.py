@@ -60,7 +60,7 @@ DATABASES = {
 # DATABASES={
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'nextgentable',
+#         'NAME': 'nextgen',
 #         'USER': 'afsal',
 #         'PASSWORD':'Afsal@samas1',
 #         'HOST': 'localhost',

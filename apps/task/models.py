@@ -144,3 +144,13 @@ class SalesmanTaskStatus(BaseModel):
 
 #     def __str__(self):
 #         return f"{self.task.task_name} changed by {self.changed_by.username}"
+
+class CompanyNotes(BaseModel):
+    note_title = models.CharField(max_length=55, null=True, blank=True)
+    note = models.TextField(blank=True, null=True)
+    audio = models.FileField(upload_to='company_notes_audio/', null=True, blank=True)
+    image = models.ImageField(upload_to='company_notes_images/', null=True, blank=True)
+
+    def __str__(self):
+        return self.note[:50] if self.note else 'No Note'
+

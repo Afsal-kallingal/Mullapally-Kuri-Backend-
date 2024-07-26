@@ -1,6 +1,6 @@
 from django.utils import timezone
 from rest_framework import serializers
-from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus
+from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus , CompanyNotes
 from apps.user_account.models import User
 # from apps.task.models import SaleTarget
 from apps.main.functions import get_auto_id
@@ -155,6 +155,13 @@ class ListViewCustomerRelationshipSerializer(BaseModelSerializer):
             'loyalty_program_signups_target',
             'progress'
         ]
+
+
+class CompanyNotesSerializer(BaseModelSerializer):
+    class Meta:
+        model = CompanyNotes
+        fields = '__all__'
+
 
 # class customer_relationship_targetBaseModelSerializer(serializers.ModelSerializer):
 #     uuid = serializers.CharField(read_only=True)

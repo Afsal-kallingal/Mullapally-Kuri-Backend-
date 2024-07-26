@@ -2,8 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from apps.main.viewsets import BaseModelViewSet
-from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus
-from apps.task.api_v1.serializers import ListViewCustomerRelationshipSerializer,ListViewResponseSalesTargetSerializer,ListViewResponseStaffTaskSerializer,SaleTargetSerializer,ListViewStaffTaskSerializer,SalesmanSalesTargetStatusSerializer, CustomerRelationshipTargetSerializer, SalesmanCustomerRelationshipTargetStatusSerializer, StaffTaskSerializer, SalesmanTaskStatusSerializer
+from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus ,CompanyNotes
+from apps.task.api_v1.serializers import ListViewCustomerRelationshipSerializer,ListViewResponseSalesTargetSerializer,ListViewResponseStaffTaskSerializer,SaleTargetSerializer,ListViewStaffTaskSerializer,SalesmanSalesTargetStatusSerializer, CustomerRelationshipTargetSerializer, SalesmanCustomerRelationshipTargetStatusSerializer, StaffTaskSerializer, SalesmanTaskStatusSerializer ,CompanyNotesSerializer
 from apps.user_account.functions import IsAdmin
 from apps.main.permissions import IsTargetAdmin
 from rest_framework.filters import SearchFilter
@@ -182,6 +182,11 @@ def admin_task(request):
     serializer = ListViewStaffTaskSerializer(tasks, many=True)
     return Response(serializer.data)
 
+
+class CompanyNotesViewset(BaseModelViewSet):
+    queryset = CompanyNotes.objects.all()
+    serializer_class = CompanyNotesSerializer
+    permission_classes = [IsAuthenticated]
 
 # class SalesTargetViewSet(BaseModelViewSet):
 #     permission_classes = [IsAuthenticated]
