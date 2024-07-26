@@ -122,7 +122,10 @@ class StaffTaskViewSet(BaseModelViewSet):
                     queryset = queryset.filter(created_at__date=date)
             except ValueError:
                 pass 
-
+        if self.request.GET.get('start_date'):
+            queryset = queryset.filter(date_added__gte=self.request.GET.get("start_date"))
+        if self.request.GET.get('end_date'):
+            queryset = queryset.filter(date_added__lte=self.request.GET.get("end_date"))
         if not user.is_admin or user.target_admin:
             return queryset.filter(staff=user)
         return queryset
@@ -152,11 +155,21 @@ class SalesmanTaskStatusViewSet(BaseModelViewSet):
                     queryset = queryset.filter(task__created_at__date=date)
             except ValueError:
                 pass 
+        if self.request.GET.get("complete") == "true":
+            queryset = queryset.filter(status='completed')
+        if self.request.GET.get("pending") == "true":
+            queryset = queryset.filter(status='pending')
+        if self.request.GET.get("in_progress") == "true":
+            queryset = queryset.filter(status='in_progress')
+        if self.request.GET.get('start_date'):
+            queryset = queryset.filter(date_added__gte=self.request.GET.get("start_date"))
+        if self.request.GET.get('end_date'):
+            queryset = queryset.filter(date_added__lte=self.request.GET.get("end_date"))
         if not user.is_admin or user.target_admin:
             # Admins and target_admin users can see all statuses
             return queryset.filter(task__staff=user)
+
         return queryset
-        
         
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -182,11 +195,12 @@ def admin_task(request):
     serializer = ListViewStaffTaskSerializer(tasks, many=True)
     return Response(serializer.data)
 
-
 class CompanyNotesViewset(BaseModelViewSet):
     queryset = CompanyNotes.objects.all()
     serializer_class = CompanyNotesSerializer
     permission_classes = [IsAuthenticated]
+
+
 
 # class SalesTargetViewSet(BaseModelViewSet):
 #     permission_classes = [IsAuthenticated]
