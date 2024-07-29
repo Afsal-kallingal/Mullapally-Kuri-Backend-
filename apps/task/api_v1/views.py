@@ -9,11 +9,10 @@ from apps.main.permissions import IsTargetAdmin
 from rest_framework.filters import SearchFilter
 from django.utils.dateparse import parse_date
 from rest_framework.decorators import api_view, permission_classes
-from django_filters.rest_framework import DjangoFilterBackend
+# from django_filters.rest_framework import DjangoFilterBackend
 from apps.staff.models import Staff
 from rest_framework import viewsets, status
-
-
+from django.shortcuts import get_object_or_404
 
 class SaleTargetViewSet(BaseModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -129,7 +128,9 @@ class StaffTaskViewSet(BaseModelViewSet):
         if self.request.GET.get('end_date'):
             queryset = queryset.filter(date_added__lte=self.request.GET.get("end_date"))
         if not user.is_admin or user.target_admin:
-            return queryset.filter(staff=user)
+            staff = get_object_or_404(Staff, user=user)
+            queryset = queryset.filter(staff=staff)
+            # queryset = queryset.filter(staff=user)
         return queryset
     
 class SalesmanTaskStatusViewSet(BaseModelViewSet):
@@ -169,8 +170,9 @@ class SalesmanTaskStatusViewSet(BaseModelViewSet):
             queryset = queryset.filter(date_added__lte=self.request.GET.get("end_date"))
         if not user.is_admin or user.target_admin:
             # Admins and target_admin users can see all statuses
-            return queryset.filter(task__staff=user)
-
+            staff = get_object_or_404(Staff, user=user)
+            queryset = queryset.filter(task__staff=staff)
+            
         return queryset
         
 @api_view(['GET'])
@@ -222,6 +224,13 @@ class TaskHistoryViewSet(viewsets.ModelViewSet):
     queryset = TaskHistory.objects.all()
     serializer_class = TaskHistorySerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = TaskHistory.objects.all()
+        task_id = self.request.query_params.get('task')
+        if task_id:
+            queryset = queryset.filter(task_id=task_id)
+        return queryset
 
 class CompanyNotesViewset(BaseModelViewSet):
     queryset = CompanyNotes.objects.all()
