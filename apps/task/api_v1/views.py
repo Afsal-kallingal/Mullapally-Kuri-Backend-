@@ -2,15 +2,17 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from apps.main.viewsets import BaseModelViewSet
-from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus ,CompanyNotes
-from apps.task.api_v1.serializers import ListViewCustomerRelationshipSerializer,ListViewResponseSalesTargetSerializer,ListViewResponseStaffTaskSerializer,SaleTargetSerializer,ListViewStaffTaskSerializer,SalesmanSalesTargetStatusSerializer, CustomerRelationshipTargetSerializer, SalesmanCustomerRelationshipTargetStatusSerializer, StaffTaskSerializer, SalesmanTaskStatusSerializer ,CompanyNotesSerializer
+from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus ,CompanyNotes ,TaskHistory
+from apps.task.api_v1.serializers import ListViewCustomerRelationshipSerializer,ListViewResponseSalesTargetSerializer,ListViewResponseStaffTaskSerializer,SaleTargetSerializer,ListViewStaffTaskSerializer,SalesmanSalesTargetStatusSerializer, CustomerRelationshipTargetSerializer, SalesmanCustomerRelationshipTargetStatusSerializer, StaffTaskSerializer, SalesmanTaskStatusSerializer ,CompanyNotesSerializer,TaskHistorySerializer
 from apps.user_account.functions import IsAdmin
 from apps.main.permissions import IsTargetAdmin
 from rest_framework.filters import SearchFilter
 from django.utils.dateparse import parse_date
 from rest_framework.decorators import api_view, permission_classes
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
+from apps.staff.models import Staff
+from rest_framework import viewsets, status
+
 
 
 class SaleTargetViewSet(BaseModelViewSet):
@@ -195,12 +197,36 @@ def admin_task(request):
     serializer = ListViewStaffTaskSerializer(tasks, many=True)
     return Response(serializer.data)
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def forward_task(request, task_id):
+    try:
+        task = StaffTask.objects.get(pk=task_id)
+    except StaffTask.DoesNotExist:
+        return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    new_staff_id = request.data.get('new_staff_id')
+
+    if not new_staff_id:
+        return Response({"error": "new_staff_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        new_staff = Staff.objects.get(pk=new_staff_id)
+    except Staff.DoesNotExist:
+        return Response({"error": "Staff not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    task.forward_task(new_staff)
+    return Response({"status": "task forwarded"}, status=status.HTTP_200_OK)
+
+class TaskHistoryViewSet(viewsets.ModelViewSet):
+    queryset = TaskHistory.objects.all()
+    serializer_class = TaskHistorySerializer
+    permission_classes = [IsAuthenticated]
+
 class CompanyNotesViewset(BaseModelViewSet):
     queryset = CompanyNotes.objects.all()
     serializer_class = CompanyNotesSerializer
     permission_classes = [IsAuthenticated]
-
-
 
 # class SalesTargetViewSet(BaseModelViewSet):
 #     permission_classes = [IsAuthenticated]

@@ -1,11 +1,11 @@
 from django.db import models
+from apps.staff.models import Staff
 from apps.user_account.models import User
 from django.utils import timezone
-import uuid
 from apps.main.models import BaseModel
 
 class SaleTarget(BaseModel):
-    salesman = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sal_targets')
+    salesman = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='sal_targets')
     target_name = models.CharField(max_length=50, null=True, blank=True)
     due_date = models.DateTimeField(null=True) 
     sales_target_revenue = models.DecimalField(max_digits=10, decimal_places=2)
@@ -43,7 +43,7 @@ class SalesmanSalesTargetStatus(BaseModel):
         self.save()
 
 class CustomerRelationshipTarget(BaseModel):
-    salesman = models.ForeignKey(User, on_delete=models.CASCADE, related_name='customer_relationship_targets')
+    salesman = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='customer_relationship_targets')
     target_name = models.CharField(max_length=50, null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     due_date = models.DateTimeField(null=True, blank=True)
@@ -89,7 +89,7 @@ class StaffTask(BaseModel):
         ('high', 'High'),
     ]
 
-    staff = models.ForeignKey(User, on_delete=models.CASCADE, related_name='staff_tasks')
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='staff_tasks')
     task_name = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     target_period = models.CharField(max_length=50, null=True, blank=True)
@@ -107,12 +107,45 @@ class StaffTask(BaseModel):
     def get_due_date(self):
         return timezone.make_aware(self.due_date) if self.due_date else None
     
-    # def task_history(self,staff):
-    #     # Create a task history entry
-    #     TaskHistory.objects.create(
-    #         task=self,
-    #         changed_by=staff,
-    #     )
+    def forward_task(self, new_staff):
+        TaskHistory.objects.create(
+            task=self,
+            previous_staff=self.staff,
+            new_staff=new_staff,
+            forwarded_at=timezone.now()
+        )
+        self.staff = new_staff
+        self.save()
+
+# class SharedTask(models.Model):
+#     task = models.ForeignKey(StaffTask, on_delete=models.CASCADE, related_name='shared_tasks')
+#     new_staff = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='shared_tasks')
+#     shared_at = models.DateTimeField(default=timezone.now)
+
+#     class Meta:
+#         unique_together = ('task', 'user')
+
+#     def __str__(self):
+#         return f'{self.task.task_name} shared with {self.user.username}'
+    
+#     def forward_task(self, new_staff):
+#         TaskHistory.objects.create(
+#             task=self,
+#             previous_staff=self.staff,
+#             new_staff=new_staff,
+#             forwarded_at=timezone.now()
+#         )
+#         self.new_staff = new_staff
+#         self.save()
+
+class TaskHistory(models.Model):
+    task = models.ForeignKey(StaffTask, on_delete=models.CASCADE, related_name='task_histories')
+    previous_staff = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, related_name='previous_tasks')
+    new_staff = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, related_name='new_tasks')
+    forwarded_at = models.DateTimeField()
+
+    def __str__(self):
+        return f'Task {self.task.task_name} forwarded from {self.previous_staff} to {self.new_staff}'
 
 class SalesmanTaskStatus(BaseModel):
     STATUS_CHOICES = [

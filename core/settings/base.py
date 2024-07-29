@@ -124,6 +124,7 @@ LOCAL_APPS = [
     "apps.main",
     "apps.staff",
     "apps.task",
+    # "apps.electrician",
     # "apps.dashboard",
     # "apps.product",
     # "apps.sales_target",

@@ -1,9 +1,9 @@
 from django.utils import timezone
 from rest_framework import serializers
-from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus , CompanyNotes
+from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus , CompanyNotes ,TaskHistory
 from apps.user_account.models import User
 # from apps.task.models import SaleTarget
-from apps.main.functions import get_auto_id
+# from apps.main.functions import get_auto_id
 from apps.main.serializers import BaseModelSerializer
 
 class SaleTargetSerializer(BaseModelSerializer):
@@ -62,7 +62,7 @@ class SalesmanTaskStatusSerializer(BaseModelSerializer):
 
 class ListViewStaffTaskSerializer(BaseModelSerializer):
     creator_name = serializers.CharField(source='creator.full_name',read_only=True)
-    staff_name = serializers.CharField(source='staff.full_name',read_only=True)
+    staff_name = serializers.CharField(source='staff.user.full_name',read_only=True)
 
     class Meta:
         model = StaffTask
@@ -75,7 +75,7 @@ class ListViewResponseStaffTaskSerializer(BaseModelSerializer):
     task_creator = serializers.CharField(source='task.creator.full_name', read_only=True)
     task_duedate = serializers.DateTimeField(source='task.due_date', read_only=True)
     task_created_time = serializers.DateTimeField(source='task.date_added', read_only=True)
-    assigned_staff= serializers.CharField(source='task.staff.full_name', read_only=True)
+    assigned_staff= serializers.CharField(source='task.staff.user.full_name', read_only=True)
 
     class Meta:
         model = SalesmanTaskStatus
@@ -156,6 +156,10 @@ class ListViewCustomerRelationshipSerializer(BaseModelSerializer):
             'progress'
         ]
 
+class TaskHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskHistory
+        fields = '__all__'
 
 class CompanyNotesSerializer(BaseModelSerializer):
     class Meta:
