@@ -30,9 +30,20 @@ class SaleTargetViewSet(BaseModelViewSet):
     
     def get_queryset(self):
         user = self.request.user
-        if user.is_admin or user.target_admin:
-            return SaleTarget.objects.all()
-        return SaleTarget.objects.filter(salesman=user)
+        queryset =  SaleTarget.objects.all()
+        if not user.is_admin or user.target_admin:
+            staff = get_object_or_404(Staff, user=user)
+            queryset = queryset.filter(salesman=staff)
+
+        if "date" in self.request.GET:
+            try:
+                date_str = self.request.GET.get("date")
+                date = parse_date(date_str)
+                if date:
+                    queryset = queryset.filter(date_added=date)
+            except ValueError:
+                pass 
+        return queryset
  
 class SalesmanSalesTargetStatusViewSet(BaseModelViewSet):
     queryset = SalesmanSalesTargetStatus.objects.all()
@@ -48,12 +59,20 @@ class SalesmanSalesTargetStatusViewSet(BaseModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_admin or user.target_admin:
-            # Admins and target_admin users can see all statuses
-            return SalesmanSalesTargetStatus.objects.all()
-        else:
-            # Regular users can only see statuses related to their assigned targets
-            return SalesmanSalesTargetStatus.objects.filter(sales_target__salesman=user)
+        queryset =  SalesmanSalesTargetStatus.objects.all()
+        if not user.is_admin or user.target_admin:
+            staff = get_object_or_404(Staff, user=user)
+            queryset = queryset.filter(sales_target__salesman=staff)
+
+        if "date" in self.request.GET:
+            try:
+                date_str = self.request.GET.get("date")
+                date = parse_date(date_str)
+                if date:
+                    queryset = queryset.filter(date_added=date)
+            except ValueError:
+                pass 
+        return queryset
 
 class CustomerRelationshipTargetViewSet(BaseModelViewSet):
     queryset = CustomerRelationshipTarget.objects.all()
@@ -66,12 +85,24 @@ class CustomerRelationshipTargetViewSet(BaseModelViewSet):
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
+    
     def get_queryset(self):
         user = self.request.user
-        if user.is_admin or user.target_admin:
-            return CustomerRelationshipTarget.objects.all()
-        return CustomerRelationshipTarget.objects.filter(salesman=user)
+        queryset =  CustomerRelationshipTarget.objects.all()
+        if not user.is_admin or user.target_admin:
+            staff = get_object_or_404(Staff, user=user)
+            queryset = queryset.filter(salesman=staff)
 
+        if "date" in self.request.GET:
+            try:
+                date_str = self.request.GET.get("date")
+                date = parse_date(date_str)
+                if date:
+                    queryset = queryset.filter(date_added=date)
+            except ValueError:
+                pass 
+        return queryset
+    
 class SalesmanCustomerRelationshipTargetStatusViewSet(BaseModelViewSet):
     queryset = SalesmanCustomerRelationshipTargetStatus.objects.all()
     serializer_class = SalesmanCustomerRelationshipTargetStatusSerializer
@@ -84,12 +115,20 @@ class SalesmanCustomerRelationshipTargetStatusViewSet(BaseModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_admin or user.target_admin:
-            # Admins and target_admin users can see all statuses
-            return SalesmanCustomerRelationshipTargetStatus.objects.all()
-        else:
-            # Regular users can only see statuses related to their assigned targets
-            return SalesmanCustomerRelationshipTargetStatus.objects.filter(customer_relationship_target__salesman=user)
+        queryset =  SalesmanCustomerRelationshipTargetStatus.objects.all()
+        if not user.is_admin or user.target_admin:
+            staff = get_object_or_404(Staff, user=user)
+            queryset = queryset.filter(customer_relationship_target__salesman=staff)
+
+        if "date" in self.request.GET:
+            try:
+                date_str = self.request.GET.get("date")
+                date = parse_date(date_str)
+                if date:
+                    queryset = queryset.filter(date_added=date)
+            except ValueError:
+                pass 
+        return queryset
 
 class StaffTaskViewSet(BaseModelViewSet):
     queryset = StaffTask.objects.all()
@@ -172,7 +211,7 @@ class SalesmanTaskStatusViewSet(BaseModelViewSet):
             # Admins and target_admin users can see all statuses
             staff = get_object_or_404(Staff, user=user)
             queryset = queryset.filter(task__staff=staff)
-            
+
         return queryset
         
 @api_view(['GET'])
@@ -195,7 +234,8 @@ def creator_task_responce_view(request):
 @permission_classes([IsAuthenticated])
 def admin_task(request):
     user = request.user
-    tasks = StaffTask.objects.filter(staff=user)
+    staff = get_object_or_404(Staff, user=user)
+    tasks = StaffTask.objects.filter(staff=staff)
     serializer = ListViewStaffTaskSerializer(tasks, many=True)
     return Response(serializer.data)
 
