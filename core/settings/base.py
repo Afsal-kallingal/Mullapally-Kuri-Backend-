@@ -12,17 +12,18 @@ env = environ.Env()
 
 # READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 # if READ_DOT_ENV_FILE:
-#     # OS environment variables take precedence over variables from .env
-#     env.read_env(str(BASE_DIR / ".env"))
-    
-env.read_env(str(BASE_DIR / ".env"))
-DEBUG = False
+#     print(READ_DOT_ENV_FILE)
+    # OS environment variables take precedence over variables from .env
 
+env.read_env(str(BASE_DIR / ".env"))
+    
 
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = env.bool("DJANGO_DEBUG", False)
+
+
+DEBUG = env.bool("DEBUG", False)
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
@@ -50,11 +51,33 @@ USE_TZ = True
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
-
 # DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
+#     "default": env.db(
+#         "DATABASE_URL",
+#         default="postgres://afsal:afsal@127.0.0.1:5432/afsal",
+#     ),
+# }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'khaf4db',
+#         'USER': 'admin',
+#         'PASSWORD': '123456',
+#         'HOST': 'localhost', 
+#         'PORT': '5432',        
+#     }
+# }
+
+
+# DATABASES={
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': env('dbNAME'),
+#         'USER': env('dbUSER'),
+#         'PASSWORD': env('dbPASSWORD'),
+#         'HOST': env('dbHOST'),
+#         'PORT': env('dbPORT'),
+#         'DISABLE_SERVER_SIDE_CURSORS': True,
 #     }
 # }
 
@@ -69,19 +92,6 @@ DATABASES={
         'DISABLE_SERVER_SIDE_CURSORS': True,
     }
 }
-
-# DATABASES={
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': env('dbNAME'),
-#         'USER': env('dbUSER'),
-#         'PASSWORD': env('dbPASSWORD'),
-#         'HOST': env('dbHOST'),
-#         'PORT': env('dbPORT'),
-#         'DISABLE_SERVER_SIDE_CURSORS': True,
-#     }
-# }
-
 
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
@@ -134,6 +144,7 @@ LOCAL_APPS = [
     # "useraccount",
     # Your stuff: custom apps go here
 ]
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -147,13 +158,19 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
+    # "allauth.account.auth_backends.AuthenticationBackend",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "user_account.User"
+
+
+USER_ACCOUNT_API_URL = env('USER_ACCOUNT_API_URL')
+USER_ACCOUNT_GATEWAY_KEY = env('USER_ACCOUNT_GATEWAY_KEY')
+
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
 # LOGIN_REDIRECT_URL = "user_account:redirect"
-# # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
+# https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 # LOGIN_URL = "account_login"
 
 # PASSWORDS
@@ -168,10 +185,10 @@ PASSWORD_HASHERS = [
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
-    # {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    # {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    # {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    # {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 # MIDDLEWARE
@@ -179,17 +196,29 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "apps.user_account.custom_token_auth.TokenAuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
 ]
+
+# STATIC
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+# STATIC_ROOT = str(BASE_DIR / "staticfiles")
+# # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
+# STATIC_URL = "/static/"
+# # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
+# STATICFILES_DIRS = [str(APPS_DIR / "static")]
+# # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
+
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT =  str(BASE_DIR / 'media/')
@@ -201,53 +230,19 @@ STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     str(BASE_DIR / 'static/')
-
 ]
+
+
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:8000",
-    "http://127.0.0.1:3000",
-    "http://localhost:3000",
-    # "https://read-and-write.example.com",
-]
-# CORS_ALLOW_ALL_ORIGINS: True
-
-# CORS_ORIGIN_ALLOW_ALL = False
-CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
-
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-    'Role'
-]
-
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-
-
 # MEDIA
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
 MEDIA_ROOT = str(APPS_DIR / "media")
-# # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
+# https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = "/media/"
 
 # TEMPLATES
@@ -257,10 +252,11 @@ TEMPLATES = [
     {
         # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
         "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "APP_DIRS": True,
+
         # https://docs.djangoproject.com/en/dev/ref/settings/#dirs
         "DIRS": [str(APPS_DIR / "templates")],
         # https://docs.djangoproject.com/en/dev/ref/settings/#app-dirs
-        "APP_DIRS": True,
         "OPTIONS": {
             # https://docs.djangoproject.com/en/dev/ref/settings/#template-context-processors
             "context_processors": [
@@ -272,7 +268,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "apps.user_account.context_processors.allauth_settings",
+                # "apps.user_account.context_processors.allauth_settings",
             ],
         },
     }
@@ -314,7 +310,7 @@ EMAIL_TIMEOUT = 5
 # Django Admin URL.
 ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = [("""Mohammed Afsal""", "afsalkallingal77@gmail.com")]
+ADMINS = [("""Afsal""", "afsal.osperb@gmail.com")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 # https://cookiecutter-django.readthedocs.io/en/latest/settings.html#other-environment-settings
@@ -347,21 +343,21 @@ LOGGING = {
 
 # django-allauth
 # ------------------------------------------------------------------------------
-ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_AUTHENTICATION_METHOD = "username"
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_REQUIRED = True
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_ADAPTER = "apps.user_account.adapters.AccountAdapter"
-# https://django-allauth.readthedocs.io/en/latest/forms.html
-ACCOUNT_FORMS = {"signup": "apps.user_account.forms.UserSignupForm"}
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-SOCIALACCOUNT_ADAPTER = "apps.user_account.adapters.SocialAccountAdapter"
-# https://django-allauth.readthedocs.io/en/latest/forms.html
-SOCIALACCOUNT_FORMS = {"signup": "apps.user_account.forms.UserSocialSignupForm"}
+# ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
+# # https://django-allauth.readthedocs.io/en/latest/configuration.html
+# ACCOUNT_AUTHENTICATION_METHOD = "username"
+# # https://django-allauth.readthedocs.io/en/latest/configuration.html
+# ACCOUNT_EMAIL_REQUIRED = True
+# # https://django-allauth.readthedocs.io/en/latest/configuration.html
+# ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+# # https://django-allauth.readthedocs.io/en/latest/configuration.html
+# ACCOUNT_ADAPTER = "apps.user_account.adapters.AccountAdapter"
+# # https://django-allauth.readthedocs.io/en/latest/forms.html
+# ACCOUNT_FORMS = {"signup": "apps.user_account.forms.UserSignupForm"}
+# # https://django-allauth.readthedocs.io/en/latest/configuration.html
+# SOCIALACCOUNT_ADAPTER = "apps.user_account.adapters.SocialAccountAdapter"
+# # https://django-allauth.readthedocs.io/en/latest/forms.html
+# SOCIALACCOUNT_FORMS = {"signup": "apps.user_account.forms.UserSocialSignupForm"}
 
 # django-rest-framework
 # -------------------------------------------------------------------------------
@@ -371,21 +367,78 @@ REST_FRAMEWORK = {
         # "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
         'rest_framework.authentication.BasicAuthentication',
+        # "apps.user_account.custom_token_auth.CustomTokenAuthentication",
+        
     ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend'),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    # "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
-CORS_URLS_REGEX = r"^/api/.*$"
+# CORS_URLS_REGEX = r"^/api/.*$"
+
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1:3000",
+    "http://localhost:3000",
+    "https://read-and-write.example.com",
+]
+CORS_ALLOW_ALL_ORIGINS: True
+
+
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
+
+CORS_ALLOW_HEADERS = (
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+)
 
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
-SPECTACULAR_SETTINGS = {
-    "TITLE": "Boilerplate API",
-    "DESCRIPTION": "Documentation of API endpoints of Boilerplate",
-    "VERSION": "2.0.0",
-    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
-}
+# SPECTACULAR_SETTINGS = {
+#     "TITLE": "Boilerplate API",
+#     "DESCRIPTION": "Documentation of API endpoints of Boilerplate",
+#     "VERSION": "2.0.0",
+#     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
+# }
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+
+SWAGGER_SETTINGS = {
+    'DEFAULT_INFO': 'core.urls.openapi_info',
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic'
+        }
+    },
+}
+
+REDOC_SETTINGS = {
+   'LAZY_RENDERING': False,
+}
+
+# OPEN_PAYMENT_API_KEY = "76f7e3c0-c3c8-11ed-8eca-6196faedc8ed"
+# OPEN_PAYMENT_API_SECRET = "b498bf021c0db7ae2375e7be4dd9aaf8b4aa5c52"
+# OPEN_PAYMENT_API = "https://sandbox-icp-api.bankopen.co/api/payment_token"
+
+
+
+# OPEN_PAYMENT_API_KEY = "66953da0-c7f7-11ed-9721-59fc5431c099"
+# OPEN_PAYMENT_API_SECRET = "d650e55d56f7e69c0e50c5c5ee57421bf7fbec27"
+# OPEN_PAYMENT_API = "https://icp-api.bankopen.co/api/payment_token"
