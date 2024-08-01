@@ -51,24 +51,24 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
-# DATABASES={
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'nextgen',
-#         'USER': 'afsal',
-#         'PASSWORD':'Afsal@samas1',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#         'DISABLE_SERVER_SIDE_CURSORS': True,
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
 #     }
 # }
+
+DATABASES={
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'nextgen',
+        'USER': 'afsal',
+        'PASSWORD':'Afsalabi@2001',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'DISABLE_SERVER_SIDE_CURSORS': True,
+    }
+}
 
 # DATABASES={
 #     'default': {
@@ -191,24 +191,18 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
-# MEDIA_URL = 'media/'
-# MEDIA_ROOT =  str(BASE_DIR / 'media/')
+MEDIA_URL = 'media/'
+MEDIA_ROOT =  str(BASE_DIR / 'media/')
 # STATIC_ROOT =  str(BASE_DIR / 'static/')
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'static'
 
-# Media files (User uploads)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 
 # STATIC_URL = '/static/'
-# STATIC_URL = 'static/'
+STATIC_URL = 'static/'
 
-# STATICFILES_DIRS = [
-#     str(BASE_DIR / 'static/')
-# ]
+STATICFILES_DIRS = [
+    str(BASE_DIR / 'static/')
 
+]
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
@@ -252,9 +246,9 @@ CORS_ALLOW_METHODS = [
 # MEDIA
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-# MEDIA_ROOT = str(APPS_DIR / "media")
+MEDIA_ROOT = str(APPS_DIR / "media")
 # # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
-# MEDIA_URL = "/media/"
+MEDIA_URL = "/media/"
 
 # TEMPLATES
 # ------------------------------------------------------------------------------
