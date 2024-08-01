@@ -183,7 +183,11 @@ class CompanyNotes(BaseModel):
     note = models.TextField(blank=True, null=True)
     audio = models.FileField(upload_to='company_notes_audio/', null=True, blank=True)
     image = models.ImageField(upload_to='company_notes_images/', null=True, blank=True)
+    tags = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return self.note[:50] if self.note else 'No Note'
+        return self.note_title if self.note_title else (self.note[:50] if self.note else 'No Note')
 
+    class Meta:
+        verbose_name = 'Company Note'
+        verbose_name_plural = 'Company Notes'
