@@ -16,6 +16,7 @@ env = environ.Env()
 #     env.read_env(str(BASE_DIR / ".env"))
     
 env.read_env(str(BASE_DIR / ".env"))
+DEBUG = False
 
 
 # GENERAL
