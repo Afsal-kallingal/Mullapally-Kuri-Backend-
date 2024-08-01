@@ -191,13 +191,19 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT =  str(BASE_DIR / 'media/')
-STATIC_ROOT =  str(BASE_DIR / 'static/')
+# MEDIA_URL = 'media/'
+# MEDIA_ROOT =  str(BASE_DIR / 'media/')
+# STATIC_ROOT =  str(BASE_DIR / 'static/')
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'static'
 
+# Media files (User uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # STATIC_URL = '/static/'
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
 
 # STATICFILES_DIRS = [
 #     str(BASE_DIR / 'static/')
