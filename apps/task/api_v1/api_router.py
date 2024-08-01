@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.urls import path
-from apps.task.api_v1.views import SaleTargetViewSet,SalesmanSalesTargetStatusViewSet,CustomerRelationshipTargetViewSet,SalesmanCustomerRelationshipTargetStatusViewSet,StaffTaskViewSet,SalesmanTaskStatusViewSet,creators_task_listview,creator_task_responce_view,admin_task,CompanyNotesViewset,forward_task,TaskHistoryViewSet
+from apps.task.api_v1.views import SaleTargetViewSet,SalesmanSalesTargetStatusViewSet,CustomerRelationshipTargetViewSet,SalesmanCustomerRelationshipTargetStatusViewSet,StaffTaskViewSet,SalesmanTaskStatusViewSet,creators_task_listview,creator_task_responce_view,admin_task,CompanyNotesViewset,forward_task,TaskHistoryViewSet,creator_task_delete_view
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
 if settings.DEBUG:
@@ -23,6 +23,7 @@ urlpatterns = [
     path('creator-task-status/', creator_task_responce_view, name='creators-task-status-list'),
     path('admin-tasks/', admin_task, name='admin-task-list-view'),
     path('staff-tasks/<uuid:task_id>/forward/', forward_task, name='forward_task'),
+    path('tasks/delete/<uuid:task_id>/', creator_task_delete_view, name='creator_task_delete_views'),
 ]
 
 app_name = "api_v1"

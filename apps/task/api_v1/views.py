@@ -222,6 +222,16 @@ def creators_task_listview(request):
     serializer = ListViewStaffTaskSerializer(tasks, many=True)
     return Response(serializer.data)
 
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def creator_task_delete_view(request, task_id):
+    try:
+        task = StaffTask.objects.get(id=task_id, creator=request.user)
+    except StaffTask.DoesNotExist:
+        return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+    task.delete()
+    return Response({"detail": "Task deleted."}, status=status.HTTP_204_NO_CONTENT)
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def creator_task_responce_view(request):
