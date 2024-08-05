@@ -96,8 +96,8 @@ class StaffTask(BaseModel):
     description = models.TextField(blank=True)
     due_date = models.DateTimeField(null=True, blank=True)
     priority = models.CharField(choices=PRIORITY_CHOICES, default='medium', max_length=10)
-    audio = models.FileField(upload_to='task_audio/', null=True, blank=True)
-    image = models.ImageField(upload_to='task_images/', null=True, blank=True)
+    # audio = models.FileField(upload_to='task_audio/', null=True, blank=True)
+    # image = models.ImageField(upload_to='task_images/', null=True, blank=True)
     document = models.FileField(upload_to='task_documents/', null=True, blank=True)
     contact_file = models.FileField(upload_to='task_contacts/', null=True, blank=True)
 
@@ -116,6 +116,20 @@ class StaffTask(BaseModel):
         )
         self.staff = new_staff
         self.save()
+
+class StaffTaskAudio(BaseModel):
+    task = models.ForeignKey(StaffTask, related_name='audios', on_delete=models.CASCADE)
+    audio = models.FileField(upload_to='task_audio/')
+
+    def __str__(self):
+        return f"Audio for {self.task.task_name}"
+
+class StaffTaskImage(BaseModel):
+    task = models.ForeignKey(StaffTask, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='task_images/')
+
+    def __str__(self):
+        return f"Image for {self.task.task_name}"
 
 # class SharedTask(models.Model):
 #     task = models.ForeignKey(StaffTask, on_delete=models.CASCADE, related_name='shared_tasks')

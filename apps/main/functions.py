@@ -298,7 +298,7 @@ def sendSMS(numbers, message,):
     # r = requests.post('https://mail-sender.vingb.com/send_sms_view/5a187066-5773-49a7-9edd-474d8754665b/9202afdb-ef44-4c6b-ad1f-667c09ea6d85/', data={
     #         "phone":numbers,
     #         "message":message,
-    #         "sender":"OSPERB"
+    #         "sender":"SAMAS"
     #     })
     return(r)
 

@@ -14,12 +14,13 @@ class CreateStaffSerializer(BaseModelSerializer):
     phone = serializers.CharField(max_length=15, write_only=True)
     email = serializers.EmailField(write_only=True)
     password = serializers.CharField(write_only=True, style={'input_type': 'password'})
+    profile_picture = serializers.ImageField(required=False, write_only=True)  # Add this line
 
     class Meta:
         model = Staff
         fields = [
             'id', 'full_name', 'phone', 'country_code', 'email', 'password', 'address_line', 'dob', 'district', 
-            'salary', 'rewards', 'designation', 'post', 'department', 'office_location', 'site', 'operating'
+            'salary', 'rewards', 'designation', 'post', 'department', 'office_location', 'site', 'operating', 'profile_picture'
         ]
 
     def create(self, validated_data):
@@ -28,6 +29,7 @@ class CreateStaffSerializer(BaseModelSerializer):
         phone = validated_data.pop('phone', None)
         email = validated_data.pop('email', None)
         password = validated_data.pop('password', None)
+        profile_picture = validated_data.pop('profile_picture', None)
 
         if validate_phone(country_code, phone):
             user_account = User(
@@ -45,6 +47,11 @@ class CreateStaffSerializer(BaseModelSerializer):
             validated_data["user"] = user_account
 
             instance = super().create(validated_data)
+            
+            # Handle the profile picture
+            if profile_picture:
+                instance.profile_picture = profile_picture
+                instance.save()
         else:
             raise serializers.ValidationError("Phone number already exists!")
 
@@ -55,18 +62,23 @@ class StaffSerializer(BaseModelSerializer):
     phone = serializers.CharField(source='user.phone')
     country_code = serializers.CharField(source='user.country_code')
     email = serializers.CharField(source='user.email')
-    # country = serializers.CharField(source='district.state.country.id',read_only=True)
-    # state = serializers.CharField(source='district.id',read_only=True)
-    state_name = serializers.CharField(source='district.state.name',read_only=True)
-    designation_name = serializers.CharField(source='designation.name',read_only=True)
-    district_name = serializers.CharField(source='district.name',read_only=True)
-    country_name = serializers.CharField(source='district.state.country.name',read_only=True)
+    profile_picture = serializers.ImageField(required=False, allow_null=True)  # Allow null for optional updates
+    
+    state_name = serializers.CharField(source='district.state.name', read_only=True)
+    designation_name = serializers.CharField(source='designation.name', read_only=True)
+    district_name = serializers.CharField(source='district.name', read_only=True)
+    country_name = serializers.CharField(source='district.state.country.name', read_only=True)
 
     class Meta:
-        model = Staff 
-        fields = ['id','full_name','email','country_code','phone','designation_name','state_name','district_name','country_name','district_name','country_name','address_line','dob','district','salary','rewards','designation','post','department','office_location','site','operating',]
+        model = Staff
+        fields = [
+            'id', 'full_name', 'email', 'country_code', 'phone', 'designation_name', 'state_name',
+            'district_name', 'country_name', 'address_line', 'dob', 'district', 'salary', 'rewards',
+            'designation', 'post', 'department', 'office_location', 'site', 'operating', 'profile_picture'
+        ]
 
     def update(self, instance, validated_data):
+        # Update basic fields
         instance.address_line = validated_data.get('address_line', instance.address_line)
         instance.dob = validated_data.get('dob', instance.dob)
         instance.district = validated_data.get('district', instance.district)
@@ -74,15 +86,18 @@ class StaffSerializer(BaseModelSerializer):
         instance.rewards = validated_data.get('rewards', instance.rewards)
         instance.designation = validated_data.get('designation', instance.designation)
         instance.post = validated_data.get('post', instance.post)
-        # instance.reports_to = validated_data.get('reports_to', instance.reports_to)
         instance.department = validated_data.get('department', instance.department)
         instance.office_location = validated_data.get('office_location', instance.office_location)
         instance.site = validated_data.get('site', instance.site)
         instance.operating = validated_data.get('operating', instance.operating)
-        # instance.description = validated_data.get('description', instance.description)
-        # instance.benefits = validated_data.get('benefits', instance.benefits)
+
+        # Update profile picture if provided
+        profile_picture = validated_data.get('profile_picture', None)
+        if profile_picture:
+            instance.profile_picture = profile_picture
+
         # Update user fields
-        user_data = validated_data.pop('user', {})  
+        user_data = validated_data.pop('user', {})
         user = instance.user
         if user_data:
             user.full_name = user_data.get('full_name', user.full_name)
@@ -90,17 +105,17 @@ class StaffSerializer(BaseModelSerializer):
             country_code = user_data.get('country_code', user.country_code)
             phone = user_data.get('phone', user.phone)
             email = user_data.get('email', user.email)
-            if((user.country_code != country_code) or (user.phone != phone) and validate_phone(country_code,phone)):
+            if (user.country_code != country_code) or (user.phone != phone) and validate_phone(country_code, phone):
                 user.phone = phone
                 user.email = email
                 user.country_code = country_code
-                user.username = str(country_code)+str(phone)
+                user.username = str(country_code) + str(phone)
             user.save()
 
         # Save the updated instance
         instance.save()
         return instance
-    
+       
 class DistrictSerializer(BaseModelSerializer):
     class Meta:
         model = District

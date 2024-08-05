@@ -67,8 +67,9 @@ def get_new_username():
 
 def send_phone_otp(country_code,phone,otp):
     # sendSMS(apikey, numbers, sender, message)
-    message=str(otp) + " is the OTP to access  " + "Khaf Smart Mahall" + ".\n\nPlease do not share this with anyone"
+    message=str(otp) + " is the OTP to access  " + "Samas Group" + ".\n\nPlease do not share this with anyone"
     return sendSMS("{}{}".format(country_code,phone), message)
+
 
 def send_email_otp(email,otp):
     

@@ -2,8 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from apps.main.viewsets import BaseModelViewSet
-from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus ,CompanyNotes ,TaskHistory
-from apps.task.api_v1.serializers import ListViewCustomerRelationshipSerializer,ListViewResponseSalesTargetSerializer,ListViewResponseStaffTaskSerializer,SaleTargetSerializer,ListViewStaffTaskSerializer,SalesmanSalesTargetStatusSerializer, CustomerRelationshipTargetSerializer, SalesmanCustomerRelationshipTargetStatusSerializer, StaffTaskSerializer, SalesmanTaskStatusSerializer ,CompanyNotesSerializer,TaskHistorySerializer
+from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus ,CompanyNotes ,TaskHistory,StaffTaskImage,StaffTaskAudio
+from apps.task.api_v1.serializers import ListViewCustomerRelationshipSerializer,ListViewResponseSalesTargetSerializer,ListViewResponseStaffTaskSerializer,SaleTargetSerializer,ListViewStaffTaskSerializer,SalesmanSalesTargetStatusSerializer, CustomerRelationshipTargetSerializer, SalesmanCustomerRelationshipTargetStatusSerializer, StaffTaskSerializer, SalesmanTaskStatusSerializer ,CompanyNotesSerializer,TaskHistorySerializer,StaffTaskAudioSerializer,StaffTaskImageSerializer
 from apps.user_account.functions import IsAdmin
 from apps.main.permissions import IsTargetAdmin
 from rest_framework.filters import SearchFilter
@@ -286,6 +286,16 @@ class CompanyNotesViewset(BaseModelViewSet):
     queryset = CompanyNotes.objects.all()
     serializer_class = CompanyNotesSerializer
     permission_classes = [IsAuthenticated]
+
+# class StaffTaskAudioViewSet(BaseModelViewSet):
+#     queryset = StaffTaskAudio.objects.all()
+#     serializer_class = StaffTaskAudioSerializer
+#     permission_classes = [IsAuthenticated]
+
+# class StaffTaskImageViewSet(BaseModelViewSet):
+#     queryset = StaffTaskImage.objects.all()
+#     serializer_class = StaffTaskImageSerializer
+#     permission_classes = [IsAuthenticated]
 
 # class SalesTargetViewSet(BaseModelViewSet):
 #     permission_classes = [IsAuthenticated]

@@ -48,7 +48,7 @@ admin.site.register(SalesmanCustomerRelationshipTargetStatus, SalesmanCustomerRe
 class StaffTaskAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'staff', 'task_name', 'created_at', 'target_period', 'description', 
-        'due_date', 'priority', 'audio', 'image', 'document', 'contact_file','creator','date_added'
+        'due_date', 'priority', 'document', 'contact_file','creator','date_added'
     )
     search_fields = ('task_name', 'staff__username', 'description')
     list_filter = ('priority', 'due_date', 'created_at')
@@ -62,3 +62,16 @@ class SalesmanTaskStatusAdmin(admin.ModelAdmin):
 
 admin.site.register(StaffTask, StaffTaskAdmin)
 admin.site.register(SalesmanTaskStatus, SalesmanTaskStatusAdmin)
+
+class StaffTaskAudioAdmin(admin.ModelAdmin):
+    list_display = ('id', 'task', 'audio','creator','date_added')
+    search_fields = ('task__task_name', 'task__staff__full_name')
+    list_filter = ('task__created_at',)
+
+class StaffTaskImageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'task', 'image','creator','date_added')
+    search_fields = ('task__task_name', 'task__staff__full_name')
+    list_filter = ('task__created_at',)
+
+admin.site.register(StaffTaskAudio, StaffTaskAudioAdmin)
+admin.site.register(StaffTaskImage, StaffTaskImageAdmin)

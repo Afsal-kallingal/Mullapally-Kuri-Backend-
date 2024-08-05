@@ -17,7 +17,7 @@ router.register('staff-tasks', StaffTaskViewSet, basename='staff-task')
 router.register('staff-task-status', SalesmanTaskStatusViewSet, basename='staff-task-status')
 router.register('all-note', CompanyNotesViewset, basename='all-staff-notes')
 router.register('task-history', TaskHistoryViewSet, basename='task-historyes')
-
+# Register StaffTaskAudioViewSet with a unique basename
 urlpatterns = [
     path('creator-tasks/', creators_task_listview, name='creators-task-list'),
     path('creator-task-status/', creator_task_responce_view, name='creators-task-status-list'),

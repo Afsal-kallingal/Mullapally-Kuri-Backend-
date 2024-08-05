@@ -73,6 +73,7 @@ class Staff(BaseModel):
     office_location = models.ForeignKey(OfficeLocation, on_delete=models.CASCADE)
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     operating = models.CharField(max_length=10, choices=OPERATING_CHOICES)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
 
     def __str__(self):
         return self.user.full_name
