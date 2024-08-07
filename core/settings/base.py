@@ -2,7 +2,7 @@
 Base settings to build other settings files upon.
 """
 from pathlib import Path
-
+import os
 import environ
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -177,16 +177,14 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT =  str(BASE_DIR / 'media/')
-STATIC_ROOT =  str(BASE_DIR / 'static/')
 
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# STATIC_URL = '/static/'
-STATIC_URL = 'static/'
-
-# STATICFILES_DIRS = [
-#     str(BASE_DIR / 'static/')
+# Media files (User uploaded files)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # ]
 
 STATICFILES_FINDERS = [
