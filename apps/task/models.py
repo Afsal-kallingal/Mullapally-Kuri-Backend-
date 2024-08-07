@@ -11,7 +11,7 @@ class SaleTarget(BaseModel):
     target_name = models.CharField(max_length=50, null=True, blank=True)
     due_date = models.DateTimeField(null=True) 
     sales_target_revenue = models.DecimalField(max_digits=10, decimal_places=2)
-    units_sold_target = models.CharField(max_length=50, null=True, blank=True) 
+    units_sold_target = models.CharField(max_length=50, null=True, blank=True)
     avg_transaction_value_target = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True)
     target_period = models.CharField(max_length=50, null=True, blank=True)
@@ -108,7 +108,6 @@ class StaffTask(BaseModel):
     image_6 = models.ImageField(upload_to='task_images/', null=True, blank=True)
     image_7 = models.ImageField(upload_to='task_images/', null=True, blank=True)
     image_8 = models.ImageField(upload_to='task_images/', null=True, blank=True)
-
     # New audio fields
     audio_1 = models.FileField(upload_to='task_audio/', null=True, blank=True)
     audio_2 = models.FileField(upload_to='task_audio/', null=True, blank=True)
@@ -175,3 +174,47 @@ class CompanyNotes(BaseModel):
     class Meta:
         verbose_name = 'Company Note'
         verbose_name_plural = 'Company Notes'
+
+class DeliveryArea(BaseModel):
+    name = models.CharField(max_length=255)
+    location = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+class Delivery(BaseModel):
+    DELIVERY = 'DELIVERY'
+    RETURN = 'RETURN'
+    
+    PENDING = 'PENDING'
+    ONGOING = 'ONGOING'
+    COMPLETE = 'COMPLETE'
+    
+    DELIVERY_TYPE_CHOICES = [
+        (DELIVERY, 'Delivery'),
+        (RETURN, 'Return'),
+    ]
+
+    DELIVERY_STATUS_CHOICES = [
+        (PENDING, 'Pending'),
+        (ONGOING, 'Ongoing'),
+        (COMPLETE, 'Complete'),
+    ]
+    
+    delivered_staff = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, blank=True, related_name="delivery_staff")
+    heading = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
+    location_place_name = models.CharField(max_length=255)
+    delivery_area = models.ForeignKey(DeliveryArea, on_delete=models.SET_NULL, null=True, blank=True)
+    delivery_date = models.DateTimeField()
+    delivery_type = models.CharField(max_length=10, choices=DELIVERY_TYPE_CHOICES)
+    status = models.CharField(max_length=10, choices=DELIVERY_STATUS_CHOICES, default=PENDING)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    # Customer fields
+    customer_name = models.CharField(max_length=255)
+    customer_address = models.TextField()
+    customer_phone = models.CharField(max_length=20)
+    
+    def __str__(self):
+        return self.heading
+    
