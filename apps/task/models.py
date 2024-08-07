@@ -3,6 +3,8 @@ from apps.staff.models import Staff
 from apps.user_account.models import User
 from django.utils import timezone
 from apps.main.models import BaseModel
+import uuid
+
 
 class SaleTarget(BaseModel):
     salesman = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='sal_targets')
@@ -88,25 +90,38 @@ class StaffTask(BaseModel):
         ('medium', 'Medium'),
         ('high', 'High'),
     ]
-
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='staff_tasks')
     task_name = models.CharField(max_length=255, null=True, blank=True)
-    created_at = models.DateTimeField(default=timezone.now)
     target_period = models.CharField(max_length=50, null=True, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
     description = models.TextField(blank=True)
     due_date = models.DateTimeField(null=True, blank=True)
     priority = models.CharField(choices=PRIORITY_CHOICES, default='medium', max_length=10)
-    # audio = models.FileField(upload_to='task_audio/', null=True, blank=True)
-    # image = models.ImageField(upload_to='task_images/', null=True, blank=True)
     document = models.FileField(upload_to='task_documents/', null=True, blank=True)
     contact_file = models.FileField(upload_to='task_contacts/', null=True, blank=True)
+    # New image fields
+    image_1 = models.ImageField(upload_to='task_images/', null=True, blank=True)
+    image_2 = models.ImageField(upload_to='task_images/', null=True, blank=True)
+    image_3 = models.ImageField(upload_to='task_images/', null=True, blank=True)
+    image_4 = models.ImageField(upload_to='task_images/', null=True, blank=True)
+    image_5 = models.ImageField(upload_to='task_images/', null=True, blank=True)
+    image_6 = models.ImageField(upload_to='task_images/', null=True, blank=True)
+    image_7 = models.ImageField(upload_to='task_images/', null=True, blank=True)
+    image_8 = models.ImageField(upload_to='task_images/', null=True, blank=True)
+
+    # New audio fields
+    audio_1 = models.FileField(upload_to='task_audio/', null=True, blank=True)
+    audio_2 = models.FileField(upload_to='task_audio/', null=True, blank=True)
+    audio_3 = models.FileField(upload_to='task_audio/', null=True, blank=True)
+    audio_4 = models.FileField(upload_to='task_audio/', null=True, blank=True)
+    audio_5 = models.FileField(upload_to='task_audio/', null=True, blank=True)
+    audio_6 = models.FileField(upload_to='task_audio/', null=True, blank=True)
+    audio_7 = models.FileField(upload_to='task_audio/', null=True, blank=True)
+    audio_8 = models.FileField(upload_to='task_audio/', null=True, blank=True)
 
     def __str__(self):
         return self.task_name
 
-    def get_due_date(self):
-        return timezone.make_aware(self.due_date) if self.due_date else None
-    
     def forward_task(self, new_staff):
         TaskHistory.objects.create(
             task=self,
@@ -116,41 +131,6 @@ class StaffTask(BaseModel):
         )
         self.staff = new_staff
         self.save()
-
-class StaffTaskAudio(BaseModel):
-    task = models.ForeignKey(StaffTask, related_name='audios', on_delete=models.CASCADE)
-    audio = models.FileField(upload_to='task_audio/')
-
-    def __str__(self):
-        return f"Audio for {self.task.task_name}"
-
-class StaffTaskImage(BaseModel):
-    task = models.ForeignKey(StaffTask, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='task_images/')
-
-    def __str__(self):
-        return f"Image for {self.task.task_name}"
-
-# class SharedTask(models.Model):
-#     task = models.ForeignKey(StaffTask, on_delete=models.CASCADE, related_name='shared_tasks')
-#     new_staff = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name='shared_tasks')
-#     shared_at = models.DateTimeField(default=timezone.now)
-
-#     class Meta:
-#         unique_together = ('task', 'user')
-
-#     def __str__(self):
-#         return f'{self.task.task_name} shared with {self.user.username}'
-    
-#     def forward_task(self, new_staff):
-#         TaskHistory.objects.create(
-#             task=self,
-#             previous_staff=self.staff,
-#             new_staff=new_staff,
-#             forwarded_at=timezone.now()
-#         )
-#         self.new_staff = new_staff
-#         self.save()
 
 class TaskHistory(models.Model):
     task = models.ForeignKey(StaffTask, on_delete=models.CASCADE, related_name='task_histories')
@@ -181,16 +161,6 @@ class SalesmanTaskStatus(BaseModel):
         self.status = 'completed'
         self.completion_date = timezone.now()
         self.save()
-
-
-# class TaskHistory(models.Model):
-#     task = models.ForeignKey(StaffTask, on_delete=models.CASCADE, related_name='history')
-#     changed_by = models.ForeignKey(User, on_delete=models.CASCADE)
-#     change_date = models.DateTimeField(auto_now_add=True)
-#     change_description = models.TextField(null=True,blank=True)
-
-#     def __str__(self):
-#         return f"{self.task.task_name} changed by {self.changed_by.username}"
 
 class CompanyNotes(BaseModel):
     note_title = models.CharField(max_length=55, null=True, blank=True)

@@ -2,8 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from apps.main.viewsets import BaseModelViewSet
-from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus ,CompanyNotes ,TaskHistory,StaffTaskImage,StaffTaskAudio
-from apps.task.api_v1.serializers import ListViewCustomerRelationshipSerializer,ListViewResponseSalesTargetSerializer,ListViewResponseStaffTaskSerializer,SaleTargetSerializer,ListViewStaffTaskSerializer,SalesmanSalesTargetStatusSerializer, CustomerRelationshipTargetSerializer, SalesmanCustomerRelationshipTargetStatusSerializer, StaffTaskSerializer, SalesmanTaskStatusSerializer ,CompanyNotesSerializer,TaskHistorySerializer,StaffTaskAudioSerializer,StaffTaskImageSerializer
+from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus ,CompanyNotes ,TaskHistory
+from apps.task.api_v1.serializers import ListViewCustomerRelationshipSerializer,ListViewResponseSalesTargetSerializer,ListViewResponseStaffTaskSerializer,SaleTargetSerializer,ListViewStaffTaskSerializer,SalesmanSalesTargetStatusSerializer, CustomerRelationshipTargetSerializer, SalesmanCustomerRelationshipTargetStatusSerializer, StaffTaskSerializer, SalesmanTaskStatusSerializer ,CompanyNotesSerializer,TaskHistorySerializer
 from apps.user_account.functions import IsAdmin
 from apps.main.permissions import IsTargetAdmin
 from rest_framework.filters import SearchFilter
@@ -166,6 +166,7 @@ class StaffTaskViewSet(BaseModelViewSet):
             queryset = queryset.filter(date_added__gte=self.request.GET.get("start_date"))
         if self.request.GET.get('end_date'):
             queryset = queryset.filter(date_added__lte=self.request.GET.get("end_date"))
+            
         if not user.is_admin or user.target_admin:
             staff = get_object_or_404(Staff, user=user)
             queryset = queryset.filter(staff=staff)

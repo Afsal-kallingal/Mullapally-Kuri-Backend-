@@ -14,6 +14,7 @@ class BaseModelSerializer(serializers.ModelSerializer):
 
 
 
+
 # class BaseModelSerializer(serializers.ModelSerializer):
 #     def create(self, validated_data):
 #         auto_id = get_auto_id(self.Meta.model)

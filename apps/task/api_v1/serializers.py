@@ -1,6 +1,6 @@
 from django.utils import timezone
 from rest_framework import serializers
-from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus , CompanyNotes ,TaskHistory,StaffTaskAudio,StaffTaskImage
+from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus , CompanyNotes ,TaskHistory
 from apps.user_account.models import User
 # from apps.task.models import SaleTarget
 # from apps.main.functions import get_auto_id
@@ -50,87 +50,77 @@ class SalesmanCustomerRelationshipTargetStatusSerializer(BaseModelSerializer):
         model = SalesmanCustomerRelationshipTargetStatus
         fields = '__all__'
 
-# class StaffTaskSerializer(BaseModelSerializer):
-#     class Meta:
-#         model = StaffTask
-#         fields = '__all__'
+class StaffTaskSerializer(BaseModelSerializer):
+    class Meta:
+        model = StaffTask
+        fields = '__all__'
 
 class SalesmanTaskStatusSerializer(BaseModelSerializer):
     class Meta:
         model = SalesmanTaskStatus
         fields = '__all__'
 
-class StaffTaskAudioSerializer(BaseModelSerializer):
-    class Meta:
-        model = StaffTaskAudio
-        fields = ['id', 'audio']
+# class StaffTaskAudioSerializer(BaseModelSerializer):
+#     class Meta(BaseModelSerializer.Meta):
+#         model = StaffTaskAudio
+#         fields = '__all__'
 
-class StaffTaskImageSerializer(BaseModelSerializer):
-    class Meta:
-        model = StaffTaskImage
-        fields = ['id', 'image']
+# class StaffTaskImageSerializer(BaseModelSerializer):
+#     class Meta(BaseModelSerializer.Meta):
+#         model = StaffTaskImage
+#         fields = '__all__'
+
+# class StaffTaskAudioSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = StaffTaskAudio
+#         fields = ['audio', 'task']
+
+# class StaffTaskAudioSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = StaffTaskAudio
+#         fields = '__all__'
+
+# class StaffTaskImageSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = StaffTaskImage
+#         fields = '__all__'
 
 class StaffTaskSerializer(BaseModelSerializer):
-    audios = StaffTaskAudioSerializer(many=True, required=False)
-    images = StaffTaskImageSerializer(many=True, required=False)
 
     class Meta:
         model = StaffTask
         fields = '__all__'
 
-    def create(self, validated_data):
-        audio_data = validated_data.pop('audios', [])
-        image_data = validated_data.pop('images', [])
-        staff_task = StaffTask.objects.create(**validated_data)
         
-        for audio in audio_data:
-            StaffTaskAudio.objects.create(task=staff_task, **audio)
-        
-        for image in image_data:
-            StaffTaskImage.objects.create(task=staff_task, **image)
-        
-        return staff_task
-
-    def update(self, instance, validated_data):
-        try:
-            audio_data = validated_data.pop('audios', [])
-            image_data = validated_data.pop('images', [])
-
-            instance.task_name = validated_data.get('task_name', instance.task_name)
-            instance.target_period = validated_data.get('target_period', instance.target_period)
-            instance.description = validated_data.get('description', instance.description)
-            instance.due_date = validated_data.get('due_date', instance.due_date)
-            instance.priority = validated_data.get('priority', instance.priority)
-            instance.document = validated_data.get('document', instance.document)
-            instance.contact_file = validated_data.get('contact_file', instance.contact_file)
-            instance.save()
-
-            # Clear existing audios and images
-            instance.audios.all().delete()
-            instance.images.all().delete()
-
-            for audio in audio_data:
-                StaffTaskAudio.objects.create(task=instance, **audio)
-            
-            for image in image_data:
-                StaffTaskImage.objects.create(task=instance, **image)
-            
-            return instance
-        except Exception as e:
-            raise serializers.ValidationError({"error": str(e)})
-
 class ListViewStaffTaskSerializer(BaseModelSerializer):
     creator_name = serializers.CharField(source='creator.full_name', read_only=True)
     staff_name = serializers.CharField(source='staff.user.full_name', read_only=True)
-    audios = StaffTaskAudioSerializer(many=True, read_only=True)
-    images = StaffTaskImageSerializer(many=True, read_only=True)
+    image_1 = serializers.ImageField(read_only=True)
+    image_2 = serializers.ImageField(read_only=True)
+    image_3 = serializers.ImageField(read_only=True)
+    image_4 = serializers.ImageField(read_only=True)
+    image_5 = serializers.ImageField(read_only=True)
+    image_6 = serializers.ImageField(read_only=True)
+    image_7 = serializers.ImageField(read_only=True)
+    image_8 = serializers.ImageField(read_only=True)
+    audio_1 = serializers.FileField(read_only=True)
+    audio_2 = serializers.FileField(read_only=True)
+    audio_3 = serializers.FileField(read_only=True)
+    audio_4 = serializers.FileField(read_only=True)
+    audio_5 = serializers.FileField(read_only=True)
+    audio_6 = serializers.FileField(read_only=True)
+    audio_7 = serializers.FileField(read_only=True)
+    audio_8 = serializers.FileField(read_only=True)
 
     class Meta:
         model = StaffTask
         fields = [
             'id', 'staff', 'date_added', 'staff_name', 'task_name', 'creator_name',
             'created_at', 'target_period', 'description', 'due_date', 'priority', 
-            'audios', 'images', 'document', 'contact_file'
+            'document', 'contact_file',
+            'image_1', 'image_2', 'image_3', 'image_4', 'image_5', 'image_6',
+            'image_7', 'image_8', 'audio_1', 'audio_2', 'audio_3', 'audio_4', 
+            'audio_5', 'audio_6', 'audio_7', 'audio_8'
         ]
 
 class ListViewResponseStaffTaskSerializer(BaseModelSerializer):
