@@ -48,8 +48,8 @@ USE_TZ = True
 DATABASES={
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'nextgendb',
-        'USER': 'abi',
+        'NAME': 'nextgen',
+        'USER': 'afsaluser',
         'PASSWORD':'Afsal@2001',
         'HOST': 'localhost',
         'PORT': '5432',
