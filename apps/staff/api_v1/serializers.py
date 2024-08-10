@@ -179,13 +179,13 @@ class SiteSerializer(BaseModelSerializer):
 #         model = Report_To
 #         fields = '__all__'
 
-class CustomerSerializer(BaseModelSerializer):
-    class Meta:
-        model = Customer
-        fields = [
-            'id', 'full_name', 'email','phone','phone_number2','billing_address',
-            'shipping_address', 'customer_type', 'tax_id', 'notes', 'is_active', 
-        ]
+# class CustomerSerializer(BaseModelSerializer):
+#     class Meta:
+#         model = Customer
+#         fields = [
+#             'id', 'full_name', 'email','phone','phone_number2','billing_address',
+#             'shipping_address', 'customer_type', 'tax_id', 'notes', 'is_active', 
+#         ]
 
     # def create(self, validated_data):
     #     full_name = validated_data.pop('full_name', None)

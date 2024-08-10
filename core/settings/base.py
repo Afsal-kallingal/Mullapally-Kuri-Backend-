@@ -112,12 +112,10 @@ LOCAL_APPS = [
     "apps.main",
     "apps.staff",
     "apps.task",
-    # "apps.dashboard",
+    "apps.electrician",
+    "apps.dashboard",
+    "apps.client",
     # "apps.product",
-    # "apps.sales_target",
-    # "apps.punching",
-    # "apps.salary_staff",
-    # "useraccount",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

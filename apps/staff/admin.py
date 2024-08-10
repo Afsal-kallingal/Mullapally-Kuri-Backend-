@@ -40,9 +40,5 @@ class SiteAdmin(admin.ModelAdmin):
     list_display = ('id','name','date_added', 'creator')
 admin.site.register(Site,SiteAdmin)
 
-class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('auto_id', 'full_name','email', 'phone', 'billing_address',
-            'shipping_address', 'customer_type', 'tax_id', 'notes', 'is_active',
-    )
-admin.site.register(Customer,CustomerAdmin)
+
 
