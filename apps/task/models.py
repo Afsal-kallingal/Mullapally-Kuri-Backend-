@@ -35,6 +35,7 @@ class SalesmanSalesTargetStatus(BaseModel):
     completion_date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(choices=STATUS_CHOICES, default='pending', max_length=20)
     notes = models.TextField(blank=True, null=True)
+    progress_sale_revenue = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -75,6 +76,7 @@ class SalesmanCustomerRelationshipTargetStatus(BaseModel):
     completion_date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(choices=STATUS_CHOICES, default='pending', max_length=20)
     notes = models.TextField(blank=True, null=True)
+    progress_customer_satisfaction_score = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
