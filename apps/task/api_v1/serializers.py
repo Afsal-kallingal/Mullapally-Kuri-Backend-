@@ -233,3 +233,11 @@ class DeliverySerializer(BaseModelSerializer):
         fields = '__all__'
         # read_only_fields = ('delivered_staff')
 
+class ListViewTaskHistorySerializer(serializers.ModelSerializer):
+    previous_staff_name = serializers.CharField(source='previous_staff.user.full_name', read_only=True)
+    new_staff_name = serializers.CharField(source='new_staff.user.full_name', read_only=True)
+    forwarded_at = serializers.DateTimeField()
+
+    class Meta:
+        model = TaskHistory
+        fields = ['task', 'previous_staff_name', 'new_staff_name', 'forwarded_at']
