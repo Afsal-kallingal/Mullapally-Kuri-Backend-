@@ -1,5 +1,5 @@
 from apps.main.serializers import BaseModelSerializer
-from apps.electrician.models import Electrician,ElectricianStaff
+from apps.electrician.models import Electrician,ElectricianStaff,ElectricianPointTrack
 from apps.user_account.functions import validate_phone
 from rest_framework import serializers
 from apps.user_account.models import User
@@ -155,3 +155,10 @@ class ListViewElectricianStaffSerializer(BaseModelSerializer):
             'electrician_name',
 
         ]
+
+
+class ElectricianPointTrackSerializer(BaseModelSerializer):
+    class Meta:
+        model = ElectricianPointTrack
+        fields = '__all__'
+        

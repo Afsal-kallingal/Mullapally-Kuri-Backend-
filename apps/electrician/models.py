@@ -155,3 +155,15 @@ class ElectricianStaff(BaseModel):
     def __str__(self):
         return self.user.full_name
 
+class ElectricianPointTrack(BaseModel):
+    electrician = models.ForeignKey(Electrician, on_delete=models.CASCADE, related_name='point_tracks')
+    total_sale_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    total_quotation_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    # quotation_count = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.electrician.user.full_name} - Sales: {self.total_sale_amount} - Quotations: {self.quotation_count}"
+
+    class Meta:
+        verbose_name = 'Electrician Point Track'
+        verbose_name_plural = 'Electrician Point Tracks'

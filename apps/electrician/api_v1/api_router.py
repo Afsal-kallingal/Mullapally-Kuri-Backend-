@@ -10,6 +10,8 @@ else:
 
 router.register('electrician', ElectricianViewSet, basename='electrician-viewset'),
 router.register('electrician-staff', ElectricianStaffViewSet, basename='electrician-staff-viewset'),
+router.register('electrician-point-tracks', ElectricianPointTrackViewSet, basename='electrician-point-tracks-viewset'),
+
 
 urlpatterns = [
     # path("investors/", InvestorListCreateAPIView.as_view(), name="investor-list-create"),
