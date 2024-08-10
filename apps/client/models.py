@@ -1,7 +1,7 @@
 from django.db import models
 from apps.main.models import BaseModel
 from apps.user_account.models import User
-from apps.staff.models import District
+from apps.staff.models import District,Staff
 
 class Client(BaseModel):
     CLIENT_TYPE_CHOICES = [
@@ -39,7 +39,7 @@ class Client(BaseModel):
     google_maps_url = models.URLField(blank=True, null=True)
 
     # Assigned User
-    assigned_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='client_assigned_staff')
+    assigned_user = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, blank=True, related_name='client_assigned_staff')
 
     # Profile Photo
     profile_photo = models.ImageField(upload_to='client_photos/', null=True, blank=True)

@@ -17,3 +17,4 @@ class ClientSerializer(BaseModelSerializer):
             'job_title', 'industry', 'followup_date', 'followup_time', 'notes',
             'latitude', 'longitude', 'google_maps_url', 'assigned_user', 'profile_photo'
         ]
+    
