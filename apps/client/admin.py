@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apps.client.models import Client
+from apps.client.models import Client,ClientInteraction
 
 class ClientAdmin(admin.ModelAdmin):
     list_display = (
@@ -38,3 +38,27 @@ class ClientAdmin(admin.ModelAdmin):
 
 # Register the model with the admin site
 admin.site.register(Client, ClientAdmin)
+
+class ClientInteractionAdmin(admin.ModelAdmin):
+    list_display = (
+        'client',
+        'interaction_type',
+        'interaction_date',
+        'staff',
+        'notes'
+    )
+    list_filter = (
+        'interaction_type',
+        'interaction_date',
+        'staff'
+    )
+    search_fields = (
+        'client__full_name',
+        'interaction_type',
+        'notes',
+        'staff__name'
+    )
+    ordering = ('-interaction_date',)
+    date_hierarchy = 'interaction_date'
+
+admin.site.register(ClientInteraction, ClientInteractionAdmin)
