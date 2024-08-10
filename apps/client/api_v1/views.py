@@ -12,4 +12,4 @@ class ClientViewSet(BaseModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
     filter_backends = [SearchFilter]
-    search_fields = ['phone','full_name']
+    search_fields = ['phone','full_name','address_line']

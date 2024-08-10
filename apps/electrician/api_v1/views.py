@@ -115,7 +115,7 @@ class ElectricianViewSet(BaseModelViewSet):
     queryset = Electrician.objects.all()
     serializer_class = CreateElectricianSerializer
     filter_backends = [SearchFilter]
-    search_fields = ['name','user__full_name']
+    search_fields = ['user__full_name']
 
     def get_permissions(self):
         if self.action == 'destroy':
