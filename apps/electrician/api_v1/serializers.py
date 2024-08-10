@@ -40,7 +40,7 @@ class CreateElectricianSerializer(BaseModelSerializer):
                 email=email,
                 username=str(country_code) + str(phone),
                 phone_verified=True,
-                # is_electrician=True,
+                is_electrician=True,
             )
             user_account.set_password(password)  # Hash the password
             user_account.save()
