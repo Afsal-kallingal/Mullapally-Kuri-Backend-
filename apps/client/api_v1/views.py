@@ -13,3 +13,10 @@ class ClientViewSet(BaseModelViewSet):
     serializer_class = ClientSerializer
     filter_backends = [SearchFilter]
     search_fields = ['phone','full_name','address_line']
+
+class ClientInteractionViewSet(BaseModelViewSet):
+    permission_classes = [IsAuthenticated ]
+    queryset = ClientInteraction.objects.all()
+    serializer_class = ClientInteractionSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['client__full_name','client__addess_line']

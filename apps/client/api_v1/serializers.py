@@ -17,4 +17,11 @@ class ClientSerializer(BaseModelSerializer):
             'job_title', 'industry', 'followup_date', 'followup_time', 'notes',
             'latitude', 'longitude', 'google_maps_url', 'assigned_user', 'profile_photo'
         ]
-    
+
+class ClientInteractionSerializer(BaseModelSerializer):
+    client = serializers.PrimaryKeyRelatedField(queryset=Client.objects.all())
+    staff = serializers.PrimaryKeyRelatedField(queryset=Staff.objects.all(), required=False, allow_null=True)
+
+    class Meta:
+        model = ClientInteraction
+        fields = '__all__'
