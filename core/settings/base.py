@@ -115,6 +115,7 @@ LOCAL_APPS = [
     "apps.electrician",
     "apps.dashboard",
     "apps.client",
+    "apps.investor",
     # "apps.product",
     # Your stuff: custom apps go here
 ]

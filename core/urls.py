@@ -14,9 +14,9 @@ urlpatterns = [
     path("api/v1/task/", include("apps.task.api_v1.api_router", namespace="task_api_router_v1")),
     path("api/v1/client/", include("apps.client.api_v1.api_router", namespace="client_api_router_v1")),
     path("api/v1/dashboard/", include("apps.dashboard.api_v1.api_router", namespace="dashboard_api_router_v1")),
-
+    path("api/v1/investor/", include("apps.investor.api_v1.api_router", namespace="company_investor_api_router_v1")),
+    
 ]
-
 # Admin URL
 urlpatterns += [
     path(settings.ADMIN_URL, admin.site.urls),
