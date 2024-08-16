@@ -172,44 +172,48 @@ class SiteSerializer(BaseModelSerializer):
     class Meta:
         model = Site
         fields = '__all__'
+        
 
-# class ReportToSerializer(BaseModelSerializer):
-#     class Meta:
-#         model = Report_To
-#         fields = '__all__'
+class StaffSerializerView(BaseModelSerializer):
+    class Meta:
+        model = Staff
+        fields = '__all__'
 
-# class CustomerSerializer(BaseModelSerializer):
-#     class Meta:
-#         model = Customer
-#         fields = [
-#             'id', 'full_name', 'email','phone','phone_number2','billing_address',
-#             'shipping_address', 'customer_type', 'tax_id', 'notes', 'is_active', 
-#         ]
+    def update(self, instance, validated_data):
+        # Update basic fields
+        instance.address_line = validated_data.get('address_line', instance.address_line)
+        instance.dob = validated_data.get('dob', instance.dob)
+        instance.district = validated_data.get('district', instance.district)
+        instance.salary = validated_data.get('salary', instance.salary)
+        instance.rewards = validated_data.get('rewards', instance.rewards)
+        instance.designation = validated_data.get('designation', instance.designation)
+        instance.post = validated_data.get('post', instance.post)
+        instance.department = validated_data.get('department', instance.department)
+        instance.office_location = validated_data.get('office_location', instance.office_location)
+        instance.site = validated_data.get('site', instance.site)
+        instance.operating = validated_data.get('operating', instance.operating)
 
-    # def create(self, validated_data):
-    #     full_name = validated_data.pop('full_name', None)
-    #     country_code = validated_data.pop('country_code', None)
-    #     phone = validated_data.pop('phone', None)
-    #     email = validated_data.pop('email', None)
-    #     password = validated_data.pop('password', None)
+        # Update profile picture if provided
+        profile_picture = validated_data.get('profile_picture', None)
+        if profile_picture:
+            instance.profile_picture = profile_picture
 
-    #     if validate_phone(country_code, phone):
-    #         user_account = User(
-    #             full_name=full_name,
-    #             country_code=country_code,
-    #             phone=phone,
-    #             email=email,
-    #             username=str(str(country_code) + str(phone)),
-    #             phone_verified=True
-    #         )
-    #         user_account.set_password(password)  # Hash the password
-    #         user_account.save()
+        # Update user fields
+        user_data = validated_data.pop('user', {})
+        user = instance.user
+        if user_data:
+            user.full_name = user_data.get('full_name', user.full_name)
+            user.email = user_data.get('email', user.email)
+            country_code = user_data.get('country_code', user.country_code)
+            phone = user_data.get('phone', user.phone)
+            email = user_data.get('email', user.email)
+            if (user.country_code != country_code) or (user.phone != phone) and validate_phone(country_code, phone):
+                user.phone = phone
+                user.email = email
+                user.country_code = country_code
+                user.username = str(country_code) + str(phone)
+            user.save()
 
-    #         # Set the user in the validated_data dictionary to be used by the super().create() call
-    #         validated_data["user"] = user_account
-
-    #         instance = super().create(validated_data)
-    #     else:
-    #         raise serializers.ValidationError("Phone number already exists!")
-
-    #     return instance
+        # Save the updated instance
+        instance.save()
+        return instance

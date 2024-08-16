@@ -40,9 +40,8 @@ class StaffViewSet(BaseModelViewSet):
     def get_serializer_class(self):
         if self.action == 'create':
             return CreateStaffSerializer
-        # elif self.action == 'update':
-        #     if self.request.user.is_admin:
-        #         return InvestorSerializer
+        elif self.action == 'update':
+            return StaffSerializerView
         #     else:
         # #         return UpdateInvestorSerializer
         # elif self.action == 'list':
