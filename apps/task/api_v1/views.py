@@ -250,6 +250,15 @@ def admin_task(request):
     serializer = ListViewStaffTaskSerializer(tasks, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def admin_task_responce_status(request):
+    user = request.user
+    staff = get_object_or_404(Staff, user=user)
+    tasks = SalesmanTaskStatus.objects.filter(task__staff=staff)
+    serializer = ListViewResponseStaffTaskSerializer(tasks, many=True)
+    return Response(serializer.data)
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def forward_task(request, task_id):
