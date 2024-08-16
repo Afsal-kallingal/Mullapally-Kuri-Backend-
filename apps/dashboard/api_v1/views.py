@@ -30,6 +30,7 @@ def task_dashboard(request):
     
     return Response(data)
 
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def delivery_dashboard(request):
@@ -48,6 +49,7 @@ def delivery_dashboard(request):
     }
 
     return Response(data)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -98,7 +100,6 @@ def staff_sales_target_summary(request):
     return Response(data)
 
 #Admin Dashboard
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def sales_and_customer_relationship_dashboard(request):

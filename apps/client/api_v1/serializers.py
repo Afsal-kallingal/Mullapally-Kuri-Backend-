@@ -25,3 +25,22 @@ class ClientInteractionSerializer(BaseModelSerializer):
     class Meta:
         model = ClientInteraction
         fields = '__all__'
+
+class ServiceRequestSerializer(BaseModelSerializer):
+    class Meta:
+        model = ServiceRequest
+        fields = '__all__'
+
+    def update(self, instance, validated_data):
+        instance.customer_name = validated_data.get('customer_name', instance.customer_name)
+        instance.customer_contact = validated_data.get('customer_contact', instance.customer_contact)
+        instance.customer_address = validated_data.get('customer_address', instance.customer_address)
+        instance.request_description = validated_data.get('request_description', instance.request_description)
+        instance.preferred_service_date = validated_data.get('preferred_service_date', instance.preferred_service_date)
+        instance.status = validated_data.get('status', instance.status)
+        instance.priority = validated_data.get('priority', instance.priority)
+        instance.location_share_url = validated_data.get('location_share_url', instance.location_share_url)
+        instance.followed_up_by = validated_data.get('followed_up_by', instance.followed_up_by)
+        instance.follow_up_date = validated_data.get('follow_up_date', instance.follow_up_date)
+        instance.save()
+        return instance

@@ -10,6 +10,8 @@ else:
 
 router.register('client', ClientViewSet, basename='client-viewset'),
 router.register('client-interaction', ClientInteractionViewSet, basename='client-interactions-viewset'),
+router.register('service-request', ServiceRequestViewSet, basename='service-request-viewset'),
+
 
 urlpatterns = [
     # path("investors/", InvestorListCreateAPIView.as_view(), name="investor-list-create"),

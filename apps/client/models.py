@@ -2,6 +2,7 @@ from django.db import models
 from apps.main.models import BaseModel
 from apps.user_account.models import User
 from apps.staff.models import District,Staff
+from apps.electrician.models import Electrician
 
 class Client(BaseModel):
     CLIENT_TYPE_CHOICES = [
@@ -80,28 +81,42 @@ class ClientInteraction(BaseModel):
         ordering = ['-interaction_date']
 
 
-# class ComplaintService(BaseModel):
-#     COMPLAINT = 'COMPLAINT'
-#     SERVICE_REQUEST = 'SERVICE_REQUEST'
-    
-#     COMPLAINT_TYPE_CHOICES = [
-#         (COMPLAINT, 'Complaint'),
-#         (SERVICE_REQUEST, 'Service Request'),
-#     ]
-    
-#     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='complaints')
-#     type = models.CharField(max_length=20, choices=COMPLAINT_TYPE_CHOICES, default=COMPLAINT)
-#     title = models.CharField(max_length=255)
-#     description = models.TextField()
-#     resolved = models.BooleanField(default=False)
-#     resolution_notes = models.TextField(blank=True, null=True)
-#     image = models.ImageField(upload_to='complaint_images/', null=True, blank=True)
-#     audio = models.FileField(upload_to='complaint_audio/', null=True, blank=True)
-    
-#     class Meta:
-#         verbose_name = 'Client Complaint/Service Request'
-#         verbose_name_plural = 'Client Complaints/Service Requests'
-#         ordering = ['-created_at']  # Assuming BaseModel has a created_at field
-    
-#     def __str__(self):
-#         return f'{self.title} - {self.client.full_name}'
+class ServiceRequest(BaseModel):
+    customer_name = models.CharField(max_length=100)
+    customer_contact = models.CharField(max_length=15)
+    customer_address = models.TextField()
+    request_description = models.TextField()
+    request_date = models.DateTimeField(auto_now_add=True)
+    preferred_service_date = models.DateField(null=True, blank=True)
+
+    # Status Choices
+    STATUS_CHOICES = [
+        ('open', 'Open'),
+        ('in_progress', 'In Progress'),
+        ('closed', 'Closed'),
+    ]
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='open')
+
+    # Priority Choices
+    PRIORITY_CHOICES = [
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('high', 'High'),
+        ('urgent', 'Urgent'),
+    ]
+    priority = models.CharField(max_length=15, choices=PRIORITY_CHOICES, default='medium')
+
+    # Location Sharing
+    location_share_url = models.URLField(max_length=200, blank=True, null=True)
+
+    # Follow-up
+    followed_up_by = models.ForeignKey(Electrician, on_delete=models.SET_NULL, null=True, blank=True, related_name='service_requests_followed_up')
+    follow_up_date = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Service Request from {self.customer_name} - {self.status}"
+
+    class Meta:
+        verbose_name = 'Service Request'
+        verbose_name_plural = 'Service Requests'
+

@@ -116,7 +116,7 @@ LOCAL_APPS = [
     "apps.dashboard",
     "apps.client",
     "apps.investor",
-    # "apps.product",
+    "apps.quotation",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

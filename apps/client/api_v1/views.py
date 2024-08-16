@@ -32,3 +32,10 @@ class ClientInteractionViewSet(BaseModelViewSet):
         
         return queryset
      
+     
+class ServiceRequestViewSet(BaseModelViewSet):
+    permission_classes = [IsAuthenticated ]
+    queryset = ServiceRequest.objects.all()
+    serializer_class = ServiceRequestSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['customer_name','customer_contact','customer_address']

@@ -5,7 +5,6 @@ from django.db import IntegrityError
 from apps.user_account.functions import validate_phone
 from apps.user_account.models import User
 from rest_framework.exceptions import ValidationError
-from apps.main.functions import get_auto_id
 
 
 class CreateStaffSerializer(BaseModelSerializer):
