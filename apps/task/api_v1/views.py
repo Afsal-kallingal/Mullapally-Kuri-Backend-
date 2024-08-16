@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from apps.main.viewsets import BaseModelViewSet
 from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus ,CompanyNotes ,TaskHistory,Delivery,DeliveryArea
-from apps.task.api_v1.serializers import ListViewCustomerRelationshipSerializer,ListViewResponseSalesTargetSerializer,ListViewResponseStaffTaskSerializer,SaleTargetSerializer,ListViewStaffTaskSerializer,SalesmanSalesTargetStatusSerializer, CustomerRelationshipTargetSerializer, SalesmanCustomerRelationshipTargetStatusSerializer, StaffTaskSerializer, SalesmanTaskStatusSerializer ,CompanyNotesSerializer,TaskHistorySerializer,DeliverySerializer,DeliveryAreaSerializer
+from apps.task.api_v1.serializers import ListViewCustomerRelationshipSerializer,ListViewResponseSalesTargetSerializer,ListViewResponseStaffTaskSerializer,SaleTargetSerializer,ListViewStaffTaskSerializer,SalesmanSalesTargetStatusSerializer, CustomerRelationshipTargetSerializer, SalesmanCustomerRelationshipTargetStatusSerializer, StaffTaskSerializer, SalesmanTaskStatusSerializer ,CompanyNotesSerializer,TaskHistorySerializer,DeliverySerializer,DeliveryAreaSerializer,ListViewTaskHistorySerializer
 from apps.user_account.functions import IsAdmin
 from apps.main.permissions import IsTargetAdmin
 from rest_framework.filters import SearchFilter
@@ -306,3 +306,20 @@ class DeliveryViewSet(BaseModelViewSet):
     queryset = Delivery.objects.all()
     serializer_class = DeliverySerializer
     permission_classes = [IsAuthenticated]
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def task_history_detail(request, task_id):
+    try:
+        task = StaffTask.objects.get(id=task_id)
+    except StaffTask.DoesNotExist:
+        return Response({'error': 'Task not found'}, status=404)
+
+    # Filter TaskHistory by task and prefetch related objects
+    task_histories = TaskHistory.objects.filter(task=task).select_related('previous_staff', 'new_staff').order_by('-forwarded_at')
+
+    # Serialize the data
+    serializer = ListViewTaskHistorySerializer(task_histories, many=True)
+
+    return Response(serializer.data)

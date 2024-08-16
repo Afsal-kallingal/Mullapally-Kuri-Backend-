@@ -191,12 +191,12 @@ class SiteViewSet(BaseModelViewSet):
 #         return [permission() for permission in permission_classes]
 
 
-class CustomersViewSet(BaseModelViewSet):
-    permission_classes = [AllowAny ]
-    queryset = Customer.objects.all()
-    serializer_class = CustomerSerializer
-    filter_backends = [SearchFilter]
-    search_fields = ['first_name','last_name','phone','shipping_address','auto_id']
+# class CustomersViewSet(BaseModelViewSet):
+#     permission_classes = [AllowAny ]
+#     queryset = Customer.objects.all()
+#     serializer_class = CustomerSerializer
+#     filter_backends = [SearchFilter]
+#     search_fields = ['first_name','last_name','phone','shipping_address','auto_id']
 
     # def get_permissions(self):
     #     if self.action == 'create' or self.action == 'destroy':
@@ -205,11 +205,11 @@ class CustomersViewSet(BaseModelViewSet):
     #         permission_classes = [IsAuthenticated]
     #     return [permission() for permission in permission_classes]
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        user = instance.user
-        User.objects.filter(pk=user.pk).delete()
-        # user.delete()
-        instance.delete()
-        return Response({"message": "Customer Deleted Successfully"}, status=status.HTTP_200_OK)
+    # def destroy(self, request, *args, **kwargs):
+    #     instance = self.get_object()
+    #     user = instance.user
+    #     User.objects.filter(pk=user.pk).delete()
+    #     # user.delete()
+    #     instance.delete()
+    #     return Response({"message": "Customer Deleted Successfully"}, status=status.HTTP_200_OK)
     

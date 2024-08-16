@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.urls import path
-from apps.punching.api_v1.views import *
+from apps.client.api_v1.views import *
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
 if settings.DEBUG:
@@ -8,7 +8,10 @@ if settings.DEBUG:
 else:
     router = SimpleRouter()
 
-router.register('punching', AttendanceViewSet, basename='punching-viewset'),
+router.register('client', ClientViewSet, basename='client-viewset'),
+router.register('client-interaction', ClientInteractionViewSet, basename='client-interactions-viewset'),
+router.register('service-request', ServiceRequestViewSet, basename='service-request-viewset'),
+
 
 urlpatterns = [
     # path("investors/", InvestorListCreateAPIView.as_view(), name="investor-list-create"),

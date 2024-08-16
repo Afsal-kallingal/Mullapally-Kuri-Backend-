@@ -34,7 +34,7 @@ class UserAdmin(auth_admin.UserAdmin):
                     "is_admin",
                     "is_superuser",
                     "staff_permisions",
-                    "product_permisons",
+                    "is_electrician",
                     "target_admin",
                     "groups",
                     "user_permissions",
@@ -43,7 +43,7 @@ class UserAdmin(auth_admin.UserAdmin):
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
-    list_display = ["username", "is_superuser",'pk','full_name','phone','phone_verified','email', 'email_verified','date_joined', 'is_admin','role','password','is_staff','staff_permisions','product_permisons','target_admin','date_joined','is_active',]
+    list_display = ["username", "is_superuser",'pk','full_name','phone','phone_verified','email', 'email_verified','date_joined', 'is_admin','role','password','is_staff','staff_permisions','is_electrician','target_admin','date_joined','is_active',]
     search_fields = ["username"]
 
 

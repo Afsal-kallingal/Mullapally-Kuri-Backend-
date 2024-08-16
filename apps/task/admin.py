@@ -65,3 +65,33 @@ class SalesmanTaskStatusAdmin(admin.ModelAdmin):
 
 admin.site.register(StaffTask, StaffTaskAdmin)
 admin.site.register(SalesmanTaskStatus, SalesmanTaskStatusAdmin)
+
+class CompanyNotesAdmin(admin.ModelAdmin):
+    list_display = ('note_title', 'note', 'audio', 'image', 'tags')
+    search_fields = ('note_title', 'note', 'tags')
+    list_filter = ('tags',)
+
+class DeliveryAreaAdmin(admin.ModelAdmin):
+    list_display = ('name', 'location')
+    search_fields = ('name', 'location')
+
+class DeliveryAdmin(admin.ModelAdmin):
+    list_display = (
+        'delivered_staff', 'heading', 'location', 'location_place_name', 'delivery_area',
+        'delivery_date', 'delivery_type', 'status', 'amount', 'customer_name', 'customer_address', 'customer_phone'
+    )
+    search_fields = ('heading', 'location', 'location_place_name', 'customer_name', 'customer_phone')
+    list_filter = ('delivery_type', 'status', 'delivery_date', 'delivery_area')
+    date_hierarchy = 'delivery_date'
+
+class TaskHistoryAdmin(admin.ModelAdmin):
+    list_display = ('task', 'previous_staff', 'new_staff', 'forwarded_at')
+    search_fields = ('task__task_name', 'previous_staff__full_name', 'new_staff__full_name')
+    list_filter = ('forwarded_at',)
+    date_hierarchy = 'forwarded_at'
+
+# Register the models with their respective admin classes
+admin.site.register(CompanyNotes, CompanyNotesAdmin)
+admin.site.register(DeliveryArea, DeliveryAreaAdmin)
+admin.site.register(Delivery, DeliveryAdmin)
+admin.site.register(TaskHistory, TaskHistoryAdmin)

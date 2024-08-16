@@ -102,8 +102,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(max_length=30,null=True,blank=True)
     is_admin = models.BooleanField(default=False,null=True,blank=True)
     staff_permisions = models.BooleanField(default=False,null=True,blank=True)
-    product_permisons = models.BooleanField(default=False,null=True,blank=True)
+    is_electrician = models.BooleanField(default=False,null=True,blank=True)
     target_admin =  models.BooleanField(default=False,null=True,blank=True)
+    # is_electrician =  models.BooleanField(default=False,null=True,blank=True)
     is_superuser = models.BooleanField(default=False,null=True,blank=True)
     
     is_staff = models.BooleanField(

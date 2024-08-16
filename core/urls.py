@@ -10,12 +10,13 @@ from rest_framework import permissions
 urlpatterns = [
     path("api/v1/user/", include("apps.user_account.api_v1.api_router", namespace="user_account_api_router_v1")),
     path("api/v1/staff/", include("apps.staff.api_v1.api_router", namespace="investor_api_router_v1")),
-    # path("api/v1/store/", include("apps.product.api_v1.api_router", namespace="product_api_router_v1")),
+    path("api/v1/electrician/", include("apps.electrician.api_v1.api_router", namespace="electrician_api_router_v1")),
     path("api/v1/task/", include("apps.task.api_v1.api_router", namespace="task_api_router_v1")),
-    # path("api/v1/attendance/", include("apps.punching.api_v1.api_router", namespace="punching_api_router_v1")),
-
+    path("api/v1/client/", include("apps.client.api_v1.api_router", namespace="client_api_router_v1")),
+    path("api/v1/dashboard/", include("apps.dashboard.api_v1.api_router", namespace="dashboard_api_router_v1")),
+    path("api/v1/investor/", include("apps.investor.api_v1.api_router", namespace="company_investor_api_router_v1")),
+    
 ]
-
 # Admin URL
 urlpatterns += [
     path(settings.ADMIN_URL, admin.site.urls),

@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.urls import path
-from django.urls import path
 from apps.staff.api_v1.views import *
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
@@ -18,7 +17,7 @@ router.register('sites', SiteViewSet, basename='site-viewset'),
 router.register("country",CountryViewSet,basename='country-viewset'),
 router.register("state",StateViewSet,basename='state-viewset'),
 router.register("district",DistrictViewSet,basename='district-viewset'),
-router.register('customer',CustomersViewSet, basename='customer-viewset'),
+# router.register('customer',CustomersViewSet, basename='customer-viewset'),
 
 
 # router.register('reports-to', ReportToViewSet, basename='reportto-viewset')

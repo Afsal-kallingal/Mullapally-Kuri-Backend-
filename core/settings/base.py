@@ -45,17 +45,17 @@ USE_TZ = True
 #     }
 # }
 
-DATABASES={
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'nextgen',
-        'USER': 'afsaluser',
-        'PASSWORD':'Afsal@2001',
-        'HOST': 'localhost',
-        'PORT': '5432',
-        'DISABLE_SERVER_SIDE_CURSORS': True,
-    }
-}
+# DATABASES={
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'nextgen',
+#         'USER': 'afsaluser',
+#         'PASSWORD':'Afsal@2001',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#         'DISABLE_SERVER_SIDE_CURSORS': True,
+#     }
+# }
 
 # DATABASES={
 #     'default': {
@@ -68,6 +68,19 @@ DATABASES={
 #         'DISABLE_SERVER_SIDE_CURSORS': True,
 #     }
 # }
+
+
+DATABASES={
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'nextgen',
+        'USER': 'afsaluser',
+        'PASSWORD':'Afsal@2001',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'DISABLE_SERVER_SIDE_CURSORS': True,
+    }
+}
 
 
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
@@ -112,12 +125,11 @@ LOCAL_APPS = [
     "apps.main",
     "apps.staff",
     "apps.task",
-    # "apps.dashboard",
-    # "apps.product",
-    # "apps.sales_target",
-    # "apps.punching",
-    # "apps.salary_staff",
-    # "useraccount",
+    "apps.electrician",
+    "apps.dashboard",
+    "apps.client",
+    "apps.investor",
+    "apps.quotation",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

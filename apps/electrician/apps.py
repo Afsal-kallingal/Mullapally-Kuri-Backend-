@@ -2,9 +2,9 @@ from django.apps import AppConfig
 from django.utils.translation import gettext_lazy as _
 
 
-class ProductConfig(AppConfig):
-    name = "apps.store"
-    verbose_name = _("store")
+class ElectricianConfig(AppConfig):
+    name = "apps.electrician"
+    verbose_name = _("electrician")
 
     # def ready(self):
     #     try:
