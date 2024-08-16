@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.urls import path
 from django.urls import path
-from apps.investor.api_v1.views import *
+from apps.investor.api_v1.views import InvestorViewSet,CompanyViewSet
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
 if settings.DEBUG:

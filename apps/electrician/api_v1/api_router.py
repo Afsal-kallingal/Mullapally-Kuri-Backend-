@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.urls import path
-from apps.electrician.api_v1.views import *
+from apps.electrician.api_v1.views import ElectricianViewSet,ElectricianStaffViewSet,ElectricianPointTrackViewSet
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
 if settings.DEBUG:

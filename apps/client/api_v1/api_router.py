@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.urls import path
-from apps.client.api_v1.views import *
+from apps.client.api_v1.views import ClientViewSet,ClientInteractionViewSet,ServiceRequestViewSet
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
 if settings.DEBUG:
