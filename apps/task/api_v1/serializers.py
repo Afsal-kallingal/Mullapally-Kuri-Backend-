@@ -91,6 +91,42 @@ class StaffTaskSerializer(BaseModelSerializer):
         model = StaffTask
         fields = '__all__'
 
+    def update(self, instance, validated_data):
+        """
+        Update the given instance with the validated data.
+        """
+        # Update the fields with the provided data or keep the existing values
+        instance.task_name = validated_data.get('task_name', instance.task_name)
+        instance.target_period = validated_data.get('target_period', instance.target_period)
+        instance.created_at = validated_data.get('created_at', instance.created_at)
+        instance.description = validated_data.get('description', instance.description)
+        instance.due_date = validated_data.get('due_date', instance.due_date)
+        instance.priority = validated_data.get('priority', instance.priority)
+        instance.document = validated_data.get('document', instance.document)
+        instance.contact_file = validated_data.get('contact_file', instance.contact_file)
+
+        # Media file fields
+        instance.image_1 = validated_data.get('image_1', instance.image_1)
+        instance.image_2 = validated_data.get('image_2', instance.image_2)
+        instance.image_3 = validated_data.get('image_3', instance.image_3)
+        instance.image_4 = validated_data.get('image_4', instance.image_4)
+        instance.image_5 = validated_data.get('image_5', instance.image_5)
+        instance.image_6 = validated_data.get('image_6', instance.image_6)
+        instance.image_7 = validated_data.get('image_7', instance.image_7)
+        instance.image_8 = validated_data.get('image_8', instance.image_8)
+
+        instance.audio_1 = validated_data.get('audio_1', instance.audio_1)
+        instance.audio_2 = validated_data.get('audio_2', instance.audio_2)
+        instance.audio_3 = validated_data.get('audio_3', instance.audio_3)
+        instance.audio_4 = validated_data.get('audio_4', instance.audio_4)
+        instance.audio_5 = validated_data.get('audio_5', instance.audio_5)
+        instance.audio_6 = validated_data.get('audio_6', instance.audio_6)
+        instance.audio_7 = validated_data.get('audio_7', instance.audio_7)
+        instance.audio_8 = validated_data.get('audio_8', instance.audio_8)
+
+        # Save the updated instance
+        instance.save()
+        return instance
         
 class ListViewStaffTaskSerializer(BaseModelSerializer):
     creator_name = serializers.CharField(source='creator.full_name', read_only=True)
@@ -226,7 +262,6 @@ class DeliveryAreaSerializer(BaseModelSerializer):
         model = DeliveryArea
         fields = '__all__'
 
-
 class DeliverySerializer(BaseModelSerializer):
     class Meta:
         model = Delivery
@@ -241,3 +276,17 @@ class ListViewTaskHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskHistory
         fields = ['task', 'previous_staff_name', 'new_staff_name', 'forwarded_at']
+
+class ListViewDeliverySerializer(BaseModelSerializer):
+    delivered_staff_name = serializers.CharField(source='delivered_staff.user.full_name', read_only=True)
+    delivery_area_name = serializers.CharField(source='delivery_area.name', read_only=True)
+    creator_name = serializers.CharField(source='creator.full_name', read_only=True)
+    
+    class Meta:
+        model = Delivery
+        fields = [
+            'id', 'auto_id', 'date_added', 'creator_name', 'is_deleted',
+            'delivered_staff', 'delivered_staff_name', 'heading', 'location', 'location_place_name',
+            'delivery_area', 'delivery_area_name', 'delivery_date', 'delivery_type',
+            'status', 'amount', 'customer_name', 'customer_address', 'customer_phone'
+        ]

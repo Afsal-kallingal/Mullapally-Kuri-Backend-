@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from apps.main.viewsets import BaseModelViewSet
 from apps.task.models import SaleTarget, SalesmanSalesTargetStatus, CustomerRelationshipTarget, SalesmanCustomerRelationshipTargetStatus, StaffTask, SalesmanTaskStatus ,CompanyNotes ,TaskHistory,Delivery,DeliveryArea
-from apps.task.api_v1.serializers import ListViewCustomerRelationshipSerializer,ListViewResponseSalesTargetSerializer,ListViewResponseStaffTaskSerializer,SaleTargetSerializer,ListViewStaffTaskSerializer,SalesmanSalesTargetStatusSerializer, CustomerRelationshipTargetSerializer, SalesmanCustomerRelationshipTargetStatusSerializer, StaffTaskSerializer, SalesmanTaskStatusSerializer ,CompanyNotesSerializer,TaskHistorySerializer,DeliverySerializer,DeliveryAreaSerializer,ListViewTaskHistorySerializer
+from apps.task.api_v1.serializers import ListViewCustomerRelationshipSerializer,ListViewResponseSalesTargetSerializer,ListViewResponseStaffTaskSerializer,SaleTargetSerializer,ListViewStaffTaskSerializer,SalesmanSalesTargetStatusSerializer, CustomerRelationshipTargetSerializer, SalesmanCustomerRelationshipTargetStatusSerializer, StaffTaskSerializer, SalesmanTaskStatusSerializer ,CompanyNotesSerializer,TaskHistorySerializer,DeliverySerializer,DeliveryAreaSerializer,ListViewTaskHistorySerializer,ListViewDeliverySerializer
 from apps.user_account.functions import IsAdmin
 from apps.main.permissions import IsTargetAdmin
 from rest_framework.filters import SearchFilter
@@ -13,6 +13,8 @@ from rest_framework.decorators import api_view, permission_classes
 from apps.staff.models import Staff
 from rest_framework import viewsets, status
 from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import NotFound
+
 
 class SaleTargetViewSet(BaseModelViewSet):
     permission_classes = [IsAuthenticated]
@@ -162,6 +164,7 @@ class StaffTaskViewSet(BaseModelViewSet):
                     queryset = queryset.filter(created_at__date=date)
             except ValueError:
                 pass 
+
         if self.request.GET.get('start_date'):
             queryset = queryset.filter(date_added__gte=self.request.GET.get("start_date"))
         if self.request.GET.get('end_date'):
@@ -173,13 +176,39 @@ class StaffTaskViewSet(BaseModelViewSet):
             # queryset = queryset.filter(staff=user)
         return queryset
     
+    def update(self, request, *args, **kwargs):
+        """
+        Handle the update of a StaffTask instance.
+        """
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+
+        # Ensure the instance exists
+        if not instance:
+            raise NotFound(detail="The requested task was not found.")
+
+        # Create and validate the serializer
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+
+        # Perform the update
+        self.perform_update(serializer)
+
+        # Return the updated instance data
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def perform_update(self, serializer):
+        """
+        Save the updated instance using the serializer.
+        """
+        serializer.save()
+    
 class SalesmanTaskStatusViewSet(BaseModelViewSet):
     queryset = SalesmanTaskStatus.objects.all()
     serializer_class = SalesmanTaskStatusSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [SearchFilter]
     search_fields = ['task__staff__full_name','task__task_name']
-
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -307,6 +336,25 @@ class DeliveryViewSet(BaseModelViewSet):
     serializer_class = DeliverySerializer
     permission_classes = [IsAuthenticated]
 
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ListViewDeliverySerializer
+        return DeliverySerializer
+    
+    def get_queryset(self):
+        queryset = Delivery.objects.all()
+
+        # Filter by start_date if provided
+        start_date = self.request.GET.get('start_date')
+        if start_date:
+            queryset = queryset.filter(date_added__gte=start_date)
+
+        # Filter by end_date if provided
+        end_date = self.request.GET.get('end_date')
+        if end_date:
+            queryset = queryset.filter(date_added__lte=end_date)
+
+        return queryset
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -323,3 +371,4 @@ def task_history_detail(request, task_id):
     serializer = ListViewTaskHistorySerializer(task_histories, many=True)
 
     return Response(serializer.data)
+
