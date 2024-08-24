@@ -38,12 +38,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 # DATABASES={
 #     'default': {
@@ -70,17 +70,17 @@ DATABASES = {
 # }
 
 
-# DATABASES={
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'nextgen',
-#         'USER': 'afsaluser',
-#         'PASSWORD':'Afsal@2001',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#         'DISABLE_SERVER_SIDE_CURSORS': True,
-#     }
-# }
+DATABASES={
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'nextgen',
+        'USER': 'afsaluser',
+        'PASSWORD':'Afsal@2001',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'DISABLE_SERVER_SIDE_CURSORS': True,
+    }
+}
 
 
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
