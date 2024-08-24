@@ -63,6 +63,11 @@ class StaffSerializer(BaseModelSerializer):
     email = serializers.CharField(source='user.email')
     profile_picture = serializers.ImageField(required=False, allow_null=True)  # Allow null for optional updates
     
+    post_name = serializers.CharField(source='post.name', read_only=True)
+    department_name = serializers.CharField(source='department.name', read_only=True)
+    site_name = serializers.CharField(source='site.name', read_only=True)
+    office_location_name = serializers.CharField(source='office_location.address', read_only=True)
+    
     state_name = serializers.CharField(source='district.state.name', read_only=True)
     designation_name = serializers.CharField(source='designation.name', read_only=True)
     district_name = serializers.CharField(source='district.name', read_only=True)
@@ -73,7 +78,8 @@ class StaffSerializer(BaseModelSerializer):
         fields = [
             'id', 'full_name', 'email', 'country_code', 'phone', 'designation_name', 'state_name',
             'district_name', 'country_name', 'address_line', 'dob', 'district', 'salary', 'rewards',
-            'designation', 'post', 'department', 'office_location', 'site', 'operating', 'profile_picture'
+            'designation', 'post', 'department', 'office_location', 'site', 'operating', 'profile_picture',
+            'post_name', 'department_name', 'site_name', 'office_location_name',
         ]
 
     def update(self, instance, validated_data):
