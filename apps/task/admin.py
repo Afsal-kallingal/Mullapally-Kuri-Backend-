@@ -76,13 +76,30 @@ class DeliveryAreaAdmin(admin.ModelAdmin):
     search_fields = ('name', 'location')
 
 class DeliveryAdmin(admin.ModelAdmin):
-    list_display = (
-        'delivered_staff', 'heading', 'location', 'location_place_name', 'delivery_area',
-        'delivery_date', 'delivery_type', 'status', 'amount', 'customer_name', 'customer_address', 'customer_phone'
-    )
-    search_fields = ('heading', 'location', 'location_place_name', 'customer_name', 'customer_phone')
-    list_filter = ('delivery_type', 'status', 'delivery_date', 'delivery_area')
-    date_hierarchy = 'delivery_date'
+    list_display = [
+        'id', 
+        'heading', 
+        'location_place_name', 
+        'delivery_area', 
+        'delivery_date', 
+        'delivery_type', 
+        'status', 
+        'amount',
+        'customer_name', 
+        'customer_address', 
+        'customer_phone', 
+        'pending_amount', 
+        'payment_mode', 
+        'note', 
+        'call_report_followup', 
+        'delivery_google_map_url',
+        'delivered_staff', 
+        'creator', 
+        'date_added', 
+        'is_deleted'
+    ]
+
+admin.site.register(Delivery, DeliveryAdmin)
 
 class TaskHistoryAdmin(admin.ModelAdmin):
     list_display = ('task', 'previous_staff', 'new_staff', 'forwarded_at')
@@ -93,5 +110,4 @@ class TaskHistoryAdmin(admin.ModelAdmin):
 # Register the models with their respective admin classes
 admin.site.register(CompanyNotes, CompanyNotesAdmin)
 admin.site.register(DeliveryArea, DeliveryAreaAdmin)
-admin.site.register(Delivery, DeliveryAdmin)
 admin.site.register(TaskHistory, TaskHistoryAdmin)

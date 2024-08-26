@@ -278,15 +278,17 @@ class ListViewTaskHistorySerializer(serializers.ModelSerializer):
         fields = ['task', 'previous_staff_name', 'new_staff_name', 'forwarded_at']
 
 class ListViewDeliverySerializer(BaseModelSerializer):
+    # Read-only fields to display related data
     delivered_staff_name = serializers.CharField(source='delivered_staff.user.full_name', read_only=True)
     delivery_area_name = serializers.CharField(source='delivery_area.name', read_only=True)
     creator_name = serializers.CharField(source='creator.full_name', read_only=True)
-    
+
     class Meta:
         model = Delivery
         fields = [
             'id', 'auto_id', 'date_added', 'creator_name', 'is_deleted',
-            'delivered_staff', 'delivered_staff_name', 'heading', 'location', 'location_place_name',
+            'delivered_staff', 'delivered_staff_name', 'heading', 'location_place_name',
             'delivery_area', 'delivery_area_name', 'delivery_date', 'delivery_type',
-            'status', 'amount', 'customer_name', 'customer_address', 'customer_phone'
+            'status', 'amount', 'customer_name', 'customer_address', 'customer_phone',
+            'pending_amount', 'payment_mode', 'note', 'call_report_followup', 'delivery_google_map_url'
         ]

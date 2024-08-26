@@ -183,15 +183,24 @@ class DeliveryArea(BaseModel):
 
     def __str__(self):
         return self.name
+    
 
 class Delivery(BaseModel):
+    # Delivery and Return types
     DELIVERY = 'DELIVERY'
     RETURN = 'RETURN'
-    
+
+    # Delivery Statuses
     PENDING = 'PENDING'
     ONGOING = 'ONGOING'
     COMPLETE = 'COMPLETE'
-    
+
+    # Payment Modes
+    CASH = 'CASH'
+    CHECK = 'CHECK'
+    UPI = 'UPI'
+
+    # Choices for fields
     DELIVERY_TYPE_CHOICES = [
         (DELIVERY, 'Delivery'),
         (RETURN, 'Return'),
@@ -202,21 +211,40 @@ class Delivery(BaseModel):
         (ONGOING, 'Ongoing'),
         (COMPLETE, 'Complete'),
     ]
-    
-    delivered_staff = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True, blank=True, related_name="delivery_staff")
+
+    PAYMENT_MODE_CHOICES = [
+        (CASH, 'Cash'),
+        (CHECK, 'Check'),
+        (UPI, 'UPI'),
+    ]
+
+    # Model Fields
+    delivered_staff = models.ForeignKey(
+        Staff, on_delete=models.SET_NULL, null=True, blank=True, related_name="delivery_staff"
+    )
     heading = models.CharField(max_length=255)
-    location = models.CharField(max_length=255)
     location_place_name = models.CharField(max_length=255)
-    delivery_area = models.ForeignKey(DeliveryArea, on_delete=models.SET_NULL, null=True, blank=True)
+    delivery_area = models.ForeignKey(
+        DeliveryArea, on_delete=models.SET_NULL, null=True, blank=True
+    )
     delivery_date = models.DateTimeField()
     delivery_type = models.CharField(max_length=10, choices=DELIVERY_TYPE_CHOICES)
     status = models.CharField(max_length=10, choices=DELIVERY_STATUS_CHOICES, default=PENDING)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    # Customer fields
+    
+    # Customer Fields
     customer_name = models.CharField(max_length=255)
     customer_address = models.TextField()
     customer_phone = models.CharField(max_length=20)
-    
+
+    # New Fields
+    pending_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    payment_mode = models.CharField(max_length=10, choices=PAYMENT_MODE_CHOICES, null=True, blank=True)
+    note = models.TextField(null=True, blank=True)
+    call_report_followup = models.TextField(null=True, blank=True)
+    delivery_google_map_url = models.URLField(max_length=500, null=True, blank=True)
+
     def __str__(self):
         return self.heading
+
     
