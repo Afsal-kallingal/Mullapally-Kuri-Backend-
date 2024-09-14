@@ -9,12 +9,12 @@ from rest_framework import permissions
 # Define API URL patterns for various apps
 urlpatterns = [
     path("api/v1/user/", include("apps.user_account.api_v1.api_router", namespace="user_account_api_router_v1")),
-    path("api/v1/staff/", include("apps.staff.api_v1.api_router", namespace="investor_api_router_v1")),
-    path("api/v1/electrician/", include("apps.electrician.api_v1.api_router", namespace="electrician_api_router_v1")),
-    path("api/v1/task/", include("apps.task.api_v1.api_router", namespace="task_api_router_v1")),
-    path("api/v1/client/", include("apps.client.api_v1.api_router", namespace="client_api_router_v1")),
-    path("api/v1/dashboard/", include("apps.dashboard.api_v1.api_router", namespace="dashboard_api_router_v1")),
-    path("api/v1/investor/", include("apps.investor.api_v1.api_router", namespace="company_investor_api_router_v1")),
+    path("api/v1/member/", include("apps.member.api_v1.api_router", namespace="member_api_router_v1")),
+    # path("api/v1/electrician/", include("apps.electrician.api_v1.api_router", namespace="electrician_api_router_v1")),
+    # path("api/v1/task/", include("apps.task.api_v1.api_router", namespace="task_api_router_v1")),
+    # path("api/v1/client/", include("apps.client.api_v1.api_router", namespace="client_api_router_v1")),
+    # path("api/v1/dashboard/", include("apps.dashboard.api_v1.api_router", namespace="dashboard_api_router_v1")),
+    # path("api/v1/investor/", include("apps.investor.api_v1.api_router", namespace="company_investor_api_router_v1")),
     
 ]
 # Admin URL

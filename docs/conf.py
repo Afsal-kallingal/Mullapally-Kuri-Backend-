@@ -24,7 +24,7 @@ os.environ["DATABASE_URL"] = "sqlite:///readthedocs.db"
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
 django.setup()
 
-# -- Project information -----------------------------------------------------
+# -- Project information -----------------------------------------------------s
 
 project = "My Awesome Project"
 copyright = """2024, Daniel Roy Greenfeld"""
