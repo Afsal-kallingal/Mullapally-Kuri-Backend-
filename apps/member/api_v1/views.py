@@ -70,7 +70,5 @@ class PaymentViewSet(BaseModelViewSet):
 
     def get_serializer_class(self):
         if self.action == 'list':
-            return PaymentListSerializer  # Use the list serializer for listing
-        return PaymentSerializer  # Use the full serializer for other actions
-
-
+            return PaymentListSerializer 
+        return PaymentSerializer 
